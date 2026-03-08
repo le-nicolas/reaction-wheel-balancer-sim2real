@@ -238,6 +238,19 @@ python final/telemetry_plotter.py --source serial --serial-port COM7 --serial-ba
 python final/final.py --mode smooth --telemetry --telemetry-transport serial --telemetry-serial-port COM6 --telemetry-serial-baud 115200
 ```
 
+Cleaner operator dashboard for side-by-side sim vs real:
+
+```powershell
+python final/sim_real_dashboard.py --sim-udp-port 9871 --real-udp-port 9872
+python final/hil_bridge.py --esp32-ip <ESP32_IP> --dashboard-telemetry --dashboard-port 9872
+```
+
+Single-launch path from the workspace launcher:
+
+```powershell
+python final/play_everything.py --ui dashboard --with-hil --no-hil-plot --esp32-ip <ESP32_IP>
+```
+
 Mouse interaction in the viewer:
 
 1. Left-double-click a body to select it.

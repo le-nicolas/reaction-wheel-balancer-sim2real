@@ -30,6 +30,13 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--udp-port", type=int, default=9871)
     parser.add_argument("--tune-port", type=int, default=9881, help="UDP port for live tuning slider commands.")
     parser.add_argument("--window-s", type=float, default=12.0)
+    parser.add_argument(
+        "--ui",
+        choices=["plotter", "dashboard", "both"],
+        default="plotter",
+        help="Which live UI to launch for telemetry.",
+    )
+    parser.add_argument("--dashboard-real-port", type=int, default=9872, help="UDP port for real/HIL dashboard frames.")
     parser.add_argument("--start-delay-s", type=float, default=0.6, help="Delay between each process launch.")
     parser.add_argument(
         "--disturbance-test",
@@ -89,6 +96,12 @@ def build_parser() -> argparse.ArgumentParser:
         default="",
         help="Extra args appended to telemetry_plotter.py.",
     )
+    parser.add_argument(
+        "--dashboard-extra",
+        type=str,
+        default="",
+        help="Extra args appended to sim_real_dashboard.py.",
+    )
     parser.add_argument("--hil-extra", type=str, default="", help="Extra args appended to hil_bridge.py.")
     return parser
 
@@ -109,26 +122,43 @@ def main() -> int:
         print("[play-all] error: --esp32-ip is required when --with-hil is enabled.")
         return 2
 
-    plotter_cmd = [
-        py,
-        str(root / "telemetry_plotter.py"),
-        "--source",
-        "udp",
-        "--udp-port",
-        str(args.udp_port),
-        "--window-s",
-        str(args.window_s),
-        "--tune-target-host",
-        "127.0.0.1",
-        "--tune-target-port",
-        str(args.tune_port),
-    ]
-    if args.sim_tuning_panel:
-        plotter_cmd.append("--tuning-panel")
-    else:
-        plotter_cmd.append("--no-tuning-panel")
-    if args.plotter_extra.strip():
-        plotter_cmd.extend(shlex.split(args.plotter_extra))
+    plotter_cmd: list[str] | None = None
+    if args.ui in {"plotter", "both"}:
+        plotter_cmd = [
+            py,
+            str(root / "telemetry_plotter.py"),
+            "--source",
+            "udp",
+            "--udp-port",
+            str(args.udp_port),
+            "--window-s",
+            str(args.window_s),
+            "--tune-target-host",
+            "127.0.0.1",
+            "--tune-target-port",
+            str(args.tune_port),
+        ]
+        if args.sim_tuning_panel:
+            plotter_cmd.append("--tuning-panel")
+        else:
+            plotter_cmd.append("--no-tuning-panel")
+        if args.plotter_extra.strip():
+            plotter_cmd.extend(shlex.split(args.plotter_extra))
+
+    dashboard_cmd: list[str] | None = None
+    if args.ui in {"dashboard", "both"}:
+        dashboard_cmd = [
+            py,
+            str(root / "sim_real_dashboard.py"),
+            "--sim-udp-port",
+            str(args.udp_port),
+            "--real-udp-port",
+            str(args.dashboard_real_port),
+            "--window-s",
+            str(args.window_s),
+        ]
+        if args.dashboard_extra.strip():
+            dashboard_cmd.extend(shlex.split(args.dashboard_extra))
 
     sim_cmd = [
         py,
@@ -175,6 +205,16 @@ def main() -> int:
             "--esp32-ip",
             args.esp32_ip,
         ]
+        if args.ui in {"dashboard", "both"}:
+            hil_cmd.extend(
+                [
+                    "--dashboard-telemetry",
+                    "--dashboard-host",
+                    "127.0.0.1",
+                    "--dashboard-port",
+                    str(args.dashboard_real_port),
+                ]
+            )
         if args.hil_plot:
             hil_cmd.append("--plot")
         else:
@@ -182,16 +222,24 @@ def main() -> int:
         if args.hil_extra.strip():
             hil_cmd.extend(shlex.split(args.hil_extra))
 
-    print("[play-all] plotter:", " ".join(shlex.quote(c) for c in plotter_cmd))
+    if plotter_cmd is not None:
+        print("[play-all] plotter:", " ".join(shlex.quote(c) for c in plotter_cmd))
+    if dashboard_cmd is not None:
+        print("[play-all] dashboard:", " ".join(shlex.quote(c) for c in dashboard_cmd))
     print("[play-all] sim    :", " ".join(shlex.quote(c) for c in sim_cmd))
     if hil_cmd is not None:
         print("[play-all] hil    :", " ".join(shlex.quote(c) for c in hil_cmd))
 
     processes: list[tuple[str, subprocess.Popen]] = []
     try:
-        processes.append(("plotter", subprocess.Popen(plotter_cmd, cwd=str(root))))
-        if args.start_delay_s > 0.0:
-            time.sleep(args.start_delay_s)
+        if plotter_cmd is not None:
+            processes.append(("plotter", subprocess.Popen(plotter_cmd, cwd=str(root))))
+            if args.start_delay_s > 0.0:
+                time.sleep(args.start_delay_s)
+        if dashboard_cmd is not None:
+            processes.append(("dashboard", subprocess.Popen(dashboard_cmd, cwd=str(root))))
+            if args.start_delay_s > 0.0:
+                time.sleep(args.start_delay_s)
         processes.append(("sim", subprocess.Popen(sim_cmd, cwd=str(root))))
         if hil_cmd is not None:
             if args.start_delay_s > 0.0:

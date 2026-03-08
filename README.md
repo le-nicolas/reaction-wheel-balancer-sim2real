@@ -114,6 +114,31 @@ python final/hil_bridge.py --esp32-ip <ESP32_IP> --mapping-profile final/hardwar
 
 This is the main dyno-style workflow. You bring the robot up physically restrained, observe telemetry, and adjust mapping values in real time.
 
+### 2.5. Cleaner dashboard for live sim vs real
+
+The new operator dashboard is a separate live view with:
+
+- bigger dual-value gauges
+- status lights for link, ESTOP, faults, encoder state, and packet health
+- side-by-side traces for simulation and real/HIL telemetry
+
+Run it with the bridge dashboard mirror enabled:
+
+```powershell
+python final/sim_real_dashboard.py --sim-udp-port 9871 --real-udp-port 9872
+python final/hil_bridge.py --esp32-ip <ESP32_IP> --dashboard-telemetry --dashboard-port 9872
+```
+
+Or launch the full stack in one command:
+
+```powershell
+python final/play_everything.py --ui dashboard --with-hil --no-hil-plot --esp32-ip <ESP32_IP>
+```
+
+Preview:
+
+![Sim vs real dashboard](artifacts/sim_real_dashboard_demo.png)
+
 ### 3. ESP32 firmware
 
 The ESP32 project lives in:

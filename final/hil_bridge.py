@@ -98,6 +98,9 @@ class SensorSample:
     base_pos_m: float
     base_vel_m_s: float
     base_encoder_valid: bool
+    battery_v: float
+    fault_code: int
+    latched_fault: bool
     ts_us: int | None
     seq: int | None
 
@@ -539,6 +542,12 @@ class HILBridge:
         self.rx_sock.settimeout(max(args.rx_timeout_ms, 1.0) / 1000.0)
         self.tx_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.esp_addr = (args.esp32_ip, args.esp32_port)
+        self.dashboard_sock = None
+        self.dashboard_addr = None
+        if args.dashboard_telemetry:
+            self.dashboard_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.dashboard_sock.setblocking(False)
+            self.dashboard_addr = (args.dashboard_host, args.dashboard_port)
 
         self.backend = StubControlBackend(imu_alpha=args.imu_alpha) if args.stub_control else RuntimeControlBackend(
             runtime_args=args.runtime_args,
@@ -751,6 +760,9 @@ class HILBridge:
             base_pos_m=float(packet.get("base_pos_m", packet.get("base_pos", 0.0))),
             base_vel_m_s=float(packet.get("base_vel_m_s", packet.get("base_vel", 0.0))),
             base_encoder_valid=bool(packet.get("base_encoder_valid", packet.get("base_encoder", False))),
+            battery_v=float(packet.get("battery_v", np.nan)),
+            fault_code=int(packet.get("fault", 0)),
+            latched_fault=bool(packet.get("latched", False)),
             ts_us=int(ts_us) if ts_us is not None else None,
             seq=int(seq) if seq is not None else None,
         )
@@ -866,6 +878,17 @@ class HILBridge:
             )
             self.csv_file.flush()
 
+        self._publish_dashboard_frame(
+            time_s=t_rel,
+            x_est=x_est,
+            sample=sample,
+            rw_norm=rw_norm,
+            drive_norm=drive_norm,
+            pitch_deg=pitch_deg,
+            roll_deg=roll_deg,
+            reaction_speed_dps=reaction_speed_dps,
+        )
+
         if now - self.last_console_print >= 1.0:
             print(
                 f"[{t_rel:7.2f}s] pitch={pitch_deg:+7.2f}deg roll={roll_deg:+7.2f}deg "
@@ -873,6 +896,60 @@ class HILBridge:
                 f"missed={self.missed_packets} timeout={self.timeout_packets} estop={int(self.estop)}"
             )
             self.last_console_print = now
+
+    def _publish_dashboard_frame(
+        self,
+        *,
+        time_s: float,
+        x_est: np.ndarray,
+        sample: SensorSample,
+        rw_norm: float,
+        drive_norm: float,
+        pitch_deg: float,
+        roll_deg: float,
+        reaction_speed_dps: float,
+    ) -> None:
+        if self.dashboard_sock is None or self.dashboard_addr is None:
+            return
+        frame = {
+            "schema": "sim_real_dashboard_v1",
+            "source": "real",
+            "backend": "stub" if self.args.stub_control else "runtime",
+            "controller_family": (
+                "stub"
+                if self.args.stub_control
+                else str(getattr(getattr(self.backend, "cfg", None), "controller_family", "runtime"))
+            ),
+            "time_s": float(time_s),
+            "pitch_rad": float(x_est[0]),
+            "roll_rad": float(x_est[1]),
+            "pitch_deg": float(pitch_deg),
+            "roll_deg": float(roll_deg),
+            "pitch_rate_rad_s": float(sample.pitch_rate_rad_s),
+            "roll_rate_rad_s": float(sample.roll_rate_rad_s),
+            "pitch_rate_dps": float(np.degrees(sample.pitch_rate_rad_s)),
+            "roll_rate_dps": float(np.degrees(sample.roll_rate_rad_s)),
+            "reaction_speed_rad_s": float(sample.reaction_speed_rad_s),
+            "reaction_speed_dps": float(reaction_speed_dps),
+            "reaction_speed_rpm": float(reaction_speed_dps / 6.0),
+            "rw_cmd_norm": float(rw_norm),
+            "drive_cmd_norm": float(drive_norm),
+            "base_pos_m": float(sample.base_pos_m),
+            "base_vel_m_s": float(sample.base_vel_m_s),
+            "base_encoder_valid": int(sample.base_encoder_valid),
+            "battery_v": float(sample.battery_v),
+            "fault": int(sample.fault_code),
+            "latched": int(sample.latched_fault),
+            "estop": int(self.estop),
+            "missed_packets": int(self.missed_packets),
+            "timeout_packets": int(self.timeout_packets),
+            "seq": int(sample.seq) if sample.seq is not None else -1,
+        }
+        raw = (json.dumps(frame, separators=(",", ":"), ensure_ascii=True) + "\n").encode("utf-8")
+        try:
+            self.dashboard_sock.sendto(raw, self.dashboard_addr)
+        except OSError:
+            pass
 
     def control_loop(self):
         print(f"HIL bridge running at {self.args.loop_hz:.1f} Hz")
@@ -945,6 +1022,8 @@ class HILBridge:
             self.control_thread.join(timeout=1.0)
         self.rx_sock.close()
         self.tx_sock.close()
+        if self.dashboard_sock is not None:
+            self.dashboard_sock.close()
         if self.csv_file is not None:
             self.csv_file.close()
         self.save_mapping_profile()
@@ -1191,6 +1270,14 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--plot-window-s", type=float, default=10.0, help="Live plot history window (seconds).")
     parser.add_argument("--csv-log", type=str, default=None, help="Optional CSV log output path.")
+    parser.add_argument(
+        "--dashboard-telemetry",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Mirror normalized bridge telemetry to a dashboard UDP listener.",
+    )
+    parser.add_argument("--dashboard-host", type=str, default="127.0.0.1", help="Dashboard telemetry UDP host.")
+    parser.add_argument("--dashboard-port", type=int, default=9872, help="Dashboard telemetry UDP port.")
     parser.add_argument(
         "--mapping-profile",
         type=str,
