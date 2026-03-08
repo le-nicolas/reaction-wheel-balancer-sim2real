@@ -288,7 +288,7 @@ class ControllerEvaluator:
             return cached
 
         controller_family = str(config.controller_family)
-        if controller_family not in {"current", "current_dob", "hybrid_modern", "paper_split_baseline"}:
+        if controller_family not in {"current", "current_dob", "hybrid_modern", "paper_split_baseline", "hardware_explicit_split"}:
             controller_family = "current"
 
         argv = [

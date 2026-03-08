@@ -53,6 +53,12 @@ struct ReactionWheelSample {
     bool valid = false;
 };
 
+struct BaseWheelEncoderSample {
+    float pos_m = 0.0f;
+    float vel_m_s = 0.0f;
+    bool valid = false;
+};
+
 struct BridgeCommand {
     float reaction_norm = 0.0f;
     float base_norm = 0.0f;
@@ -95,6 +101,9 @@ float g_u_eff_applied[3] = {0.0f, 0.0f, 0.0f};
 float g_reaction_target_voltage = 0.0f;
 float g_pitch_state_rad = 0.0f;
 float g_roll_state_rad = 0.0f;
+volatile int32_t g_base_encoder_counts = 0;
+volatile uint8_t g_base_encoder_state = 0u;
+int32_t g_last_base_encoder_counts = 0;
 
 float clampf(float value, float lo, float hi) {
     if (value < lo) {
@@ -214,6 +223,56 @@ ReactionWheelSample read_reaction_wheel() {
     return sample;
 }
 
+void IRAM_ATTR handle_base_encoder_edge() {
+    const uint8_t prev = g_base_encoder_state;
+    const uint8_t curr =
+        (static_cast<uint8_t>(digitalRead(board_pins::kBaseEncoderA)) << 1) |
+        static_cast<uint8_t>(digitalRead(board_pins::kBaseEncoderB));
+    static const int8_t kTransitionLut[16] = {0, -1, 1, 0, 1, 0, 0, -1, -1, 0, 0, 1, 0, 1, -1, 0};
+    const int8_t step = kTransitionLut[(prev << 2) | curr];
+    if (robot_config::kInvertBaseEncoder) {
+        g_base_encoder_counts -= static_cast<int32_t>(step);
+    } else {
+        g_base_encoder_counts += static_cast<int32_t>(step);
+    }
+    g_base_encoder_state = curr;
+}
+
+void begin_base_encoder() {
+    if (!robot_config::kHasBaseWheelEncoder) {
+        return;
+    }
+    const uint8_t pin_mode = robot_config::kBaseEncoderUsePullups ? INPUT_PULLUP : INPUT;
+    pinMode(board_pins::kBaseEncoderA, pin_mode);
+    pinMode(board_pins::kBaseEncoderB, pin_mode);
+    g_base_encoder_state =
+        (static_cast<uint8_t>(digitalRead(board_pins::kBaseEncoderA)) << 1) |
+        static_cast<uint8_t>(digitalRead(board_pins::kBaseEncoderB));
+    attachInterrupt(digitalPinToInterrupt(board_pins::kBaseEncoderA), handle_base_encoder_edge, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(board_pins::kBaseEncoderB), handle_base_encoder_edge, CHANGE);
+}
+
+BaseWheelEncoderSample read_base_encoder(float dt_s) {
+    BaseWheelEncoderSample sample;
+    if (!robot_config::kHasBaseWheelEncoder) {
+        return sample;
+    }
+
+    noInterrupts();
+    const int32_t counts = g_base_encoder_counts;
+    interrupts();
+
+    const float meters_per_count =
+        (2.0f * PI * robot_config::kBaseWheelRadiusM) / fmaxf(static_cast<float>(robot_config::kBaseEncoderTicksPerRev), 1.0f);
+    const int32_t delta_counts = counts - g_last_base_encoder_counts;
+    g_last_base_encoder_counts = counts;
+
+    sample.pos_m = static_cast<float>(counts) * meters_per_count;
+    sample.vel_m_s = static_cast<float>(delta_counts) * meters_per_count / fmaxf(dt_s, 1.0e-4f);
+    sample.valid = true;
+    return sample;
+}
+
 void clear_faults_and_states() {
     controller_reset(&g_controller_state);
     estimator_reset(&g_estimator_state);
@@ -223,6 +282,7 @@ void clear_faults_and_states() {
     g_reaction_target_voltage = 0.0f;
     g_applied_outputs = AppliedOutputs{};
     g_bridge_command = BridgeCommand{};
+    g_last_base_encoder_counts = 0;
 }
 
 void begin_wifi_if_needed() {
@@ -378,11 +438,44 @@ AppliedOutputs compute_hil_outputs(uint32_t now_us) {
     return outputs;
 }
 
-AppliedOutputs compute_onboard_outputs(const AttitudeEstimate& attitude, const ReactionWheelSample& reaction) {
+AppliedOutputs compute_onboard_outputs(
+    const AttitudeEstimate& attitude,
+    const ReactionWheelSample& reaction,
+    const BaseWheelEncoderSample& base_encoder
+) {
     AppliedOutputs outputs;
     outputs.estop = fault_manager_is_latched(&g_fault_state) || !attitude.valid || !reaction.valid;
     if (outputs.estop) {
         memset(g_u_eff_applied, 0, sizeof(g_u_eff_applied));
+        return outputs;
+    }
+
+    if (robot_config::kControlMode == robot_config::ControlMode::kOnboardExplicitSplit) {
+        const float rw_norm = clampf(
+            -(
+                robot_config::kOnboardSplitRollKp * attitude.roll_rad +
+                robot_config::kOnboardSplitRollKd * attitude.roll_rate_rad_s +
+                robot_config::kOnboardSplitWheelDamp * reaction.speed_rad_s
+            ),
+            -1.0f,
+            1.0f
+        );
+        float base_norm = -(
+            robot_config::kOnboardSplitPitchKp * attitude.pitch_rad +
+            robot_config::kOnboardSplitPitchKd * attitude.pitch_rate_rad_s
+        );
+        if (base_encoder.valid) {
+            base_norm += -(
+                robot_config::kOnboardSplitBaseHoldKp * base_encoder.pos_m +
+                robot_config::kOnboardSplitBaseHoldKd * base_encoder.vel_m_s
+            );
+        }
+        outputs.reaction_norm = rw_norm;
+        outputs.base_norm = robot_config::kBaseWheelEnabledInOnboard ? clampf(base_norm, -1.0f, 1.0f) : 0.0f;
+        outputs.estop = false;
+        g_u_eff_applied[0] = outputs.reaction_norm * CTRL_WHEEL_TORQUE_LIMIT_NM;
+        g_u_eff_applied[1] = outputs.base_norm * CTRL_BASE_FORCE_SOFT_LIMIT;
+        g_u_eff_applied[2] = 0.0f;
         return outputs;
     }
 
@@ -392,6 +485,12 @@ AppliedOutputs compute_onboard_outputs(const AttitudeEstimate& attitude, const R
     y[2] = attitude.pitch_rate_rad_s;
     y[3] = attitude.roll_rate_rad_s;
     y[4] = reaction.speed_rad_s;
+    if (robot_config::kHasBaseWheelEncoder && CTRL_NY >= 9) {
+        y[5] = base_encoder.valid ? base_encoder.pos_m : 0.0f;
+        y[6] = 0.0f;
+        y[7] = base_encoder.valid ? base_encoder.vel_m_s : 0.0f;
+        y[8] = 0.0f;
+    }
     const float refs[2] = {CTRL_X_REF, CTRL_Y_REF};
     float u_cmd[3] = {0.0f, 0.0f, 0.0f};
     actuator_cmd_t guarded{};
@@ -498,6 +597,7 @@ void send_telemetry(
     const RawImuSample& imu,
     const AttitudeEstimate& attitude,
     const ReactionWheelSample& reaction,
+    const BaseWheelEncoderSample& base_encoder,
     uint32_t now_us
 ) {
     if (!g_wifi_ready || !robot_config::kSendTelemetry) {
@@ -516,6 +616,9 @@ void send_telemetry(
     doc["roll_rad"] = attitude.roll_rad;
     doc["reaction_angle"] = degrees(reaction.angle_rad);
     doc["reaction_speed"] = degrees(reaction.speed_rad_s);
+    doc["base_pos_m"] = base_encoder.pos_m;
+    doc["base_vel_m_s"] = base_encoder.vel_m_s;
+    doc["base_encoder_valid"] = base_encoder.valid ? 1 : 0;
     doc["rw_cmd"] = g_applied_outputs.reaction_norm;
     doc["base_cmd"] = g_applied_outputs.base_norm;
     doc["fault"] = static_cast<int>(g_fault_state.code);
@@ -582,6 +685,7 @@ void setup() {
     Wire.setClock(400000);
     init_bmi088();
     begin_base_motor_driver();
+    begin_base_encoder();
     begin_reaction_wheel();
     begin_wifi_if_needed();
 
@@ -613,6 +717,7 @@ void loop() {
     const float dt_s = static_cast<float>(robot_config::kLoopPeriodUs) * 1.0e-6f;
     const RawImuSample imu = read_bmi088();
     const ReactionWheelSample reaction = read_reaction_wheel();
+    const BaseWheelEncoderSample base_encoder = read_base_encoder(dt_s);
     const AttitudeEstimate attitude = update_attitude(imu, dt_s);
 
     AppliedOutputs outputs;
@@ -621,10 +726,10 @@ void loop() {
     } else if (robot_config::IsHilMode()) {
         outputs = compute_hil_outputs(now_us);
     } else {
-        outputs = compute_onboard_outputs(attitude, reaction);
+        outputs = compute_onboard_outputs(attitude, reaction, base_encoder);
     }
 
     apply_outputs(outputs);
-    send_telemetry(imu, attitude, reaction, now_us);
+    send_telemetry(imu, attitude, reaction, base_encoder, now_us);
     print_debug(attitude, reaction);
 }

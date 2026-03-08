@@ -509,6 +509,65 @@ def compute_control_command(
         du_lqr *= schedule_scale
     terms["term_lqr_core"] = np.array([du_lqr[0], du_lqr[1], du_lqr[2]], dtype=float)
 
+    if cfg.controller_family == "hardware_explicit_split" and cfg.allow_base_motion:
+        # Real-hardware split rig: keep pitch on the driven base wheel and roll on the reaction wheel.
+        roll_rw = float(
+            -cfg.base_command_gain * (cfg.base_roll_kp * x_est[1] + cfg.base_roll_kd * x_est[3]) * schedule_scale
+        )
+        terms["term_roll_stability"][0] = roll_rw
+
+        rw_frac = abs(float(x_est[4])) / max(cfg.max_wheel_speed_rad_s, 1e-6)
+        rw_damp_gain = 0.18 + 0.60 * max(0.0, rw_frac - 0.35)
+        rw_target = float(roll_rw - rw_damp_gain * x_est[4])
+        terms["term_despin"][0] += float(-rw_damp_gain * x_est[4])
+        du_rw_cmd = float(rw_target - u_eff_applied[0])
+        rw_du_limit = _resolve_rw_du_limit(cfg=cfg, x_est=x_est, balance_phase=balance_phase, wheel_only=False)
+        rw_u_limit = cfg.max_u[0]
+        du_hits[0] += int(abs(du_rw_cmd) > rw_du_limit)
+        du_rw = float(np.clip(du_rw_cmd, -rw_du_limit, rw_du_limit))
+        u_rw_unc = float(u_eff_applied[0] + du_rw)
+        sat_hits[0] += int(abs(u_rw_unc) > rw_u_limit)
+        u_rw_cmd = float(np.clip(u_rw_unc, -rw_u_limit, rw_u_limit))
+
+        hold_x = -cfg.base_damping_gain * x_est[7] - cfg.base_centering_gain * x_ctrl[5]
+        terms["term_base_hold"][1] = hold_x
+        pitch_base = float(
+            -10.0 * cfg.base_command_gain * (cfg.base_pitch_kp * x_est[0] + cfg.base_pitch_kd * x_est[2]) * schedule_scale
+        )
+        terms["term_pitch_stability"][1] = pitch_base
+
+        base_target = np.array([hold_x + pitch_base, 0.0], dtype=float)
+        du_base_cmd = base_target - u_eff_applied[1:]
+        split_base_du_limit = cfg.max_du[1:].copy()
+        split_base_du_limit[0] = max(split_base_du_limit[0], 0.12)
+        du_hits[1:] += (np.abs(du_base_cmd) > split_base_du_limit).astype(int)
+        du_base = np.clip(du_base_cmd, -split_base_du_limit, split_base_du_limit)
+        u_base_unc = u_eff_applied[1:] + du_base
+        sat_hits[1:] += (np.abs(u_base_unc) > cfg.max_u[1:]).astype(int)
+        u_base_cmd = np.clip(u_base_unc, -cfg.max_u[1:], cfg.max_u[1:])
+        u_base_cmd[1] = 0.0
+
+        u_cmd = np.array([u_rw_cmd, u_base_cmd[0], u_base_cmd[1]], dtype=float)
+        u_cmd = _apply_dob_compensation(cfg, u_cmd, sat_hits, terms, dob_compensation)
+        if cfg.hardware_safe:
+            clipped_base = np.clip(u_cmd[1:], -0.35, 0.35)
+            terms["term_safety_shaping"][1:] += clipped_base - u_cmd[1:]
+            u_cmd[1:] = clipped_base
+        return (
+            u_cmd,
+            base_int,
+            base_ref,
+            1.0,
+            np.zeros_like(u_base_smooth),
+            0.0,
+            wheel_momentum_bias_int,
+            rw_u_limit,
+            wheel_over_budget,
+            wheel_over_hard,
+            high_spin_active,
+            terms,
+        )
+
     # Literature-style benchmark comparator:
     # pitch = LQR channel, roll = sliding mode with fuzzy gain.
     if cfg.controller_family == "paper_split_baseline":

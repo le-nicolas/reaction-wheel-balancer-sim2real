@@ -48,7 +48,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--runtime-args",
         type=str,
-        default="--mode robust --hardware-safe --control-hz 250 --controller-family current",
+        default="--mode robust --hardware-safe --control-hz 250 --controller-family hardware_explicit_split",
         help="Forwarded only when --bridge-backend runtime.",
     )
     parser.add_argument("--outdir", type=str, default="final/results")
@@ -301,6 +301,9 @@ class FakeEsp32Rig:
                     "gy": float(state["pitch_rate_dps"]),
                     "gz": 0.0,
                     "reaction_speed": 0.0,
+                    "base_pos_m": 0.0,
+                    "base_vel_m_s": 0.0,
+                    "base_encoder_valid": 0,
                     "ts": int(t_s * 1_000_000.0),
                     "seq": self.seq,
                 }
@@ -365,7 +368,7 @@ def run_bridge(args: argparse.Namespace, scenario: Scenario) -> dict[str, object
     )
     rig = FakeEsp32Rig(pc_addr=(args.pc_ip, args.pc_port), listen_addr=(args.esp_ip, args.esp_port), loop_hz=args.loop_hz)
     try:
-        time.sleep(0.35)
+        time.sleep(0.60)
         records = rig.run_scenario(scenario)
         time.sleep(0.15)
     finally:

@@ -1,0 +1,13 @@
+OBJECTIVE=balanced
+
+BASELINE BY MODE/FAMILY
+mode_default/current/nominal/default: preset=default stability_profile=default survival=1.000 crash_rate=0.000 score=-200.800 wheel_over_budget=0.000 wheel_over_hard=0.000
+mode_default/hardware_explicit_split/nominal/default: preset=default stability_profile=default survival=1.000 crash_rate=0.000 score=-200.800 wheel_over_budget=0.000 wheel_over_hard=0.000
+mode_low_spin_robust/current/nominal/default: preset=default stability_profile=low-spin-robust survival=1.000 crash_rate=0.000 score=-169.071 wheel_over_budget=1.190 wheel_over_hard=0.000
+mode_low_spin_robust/hardware_explicit_split/nominal/default: preset=default stability_profile=low-spin-robust survival=1.000 crash_rate=0.000 score=-200.800 wheel_over_budget=0.000 wheel_over_hard=0.000
+
+TOP ACCEPTED PER MODE/FAMILY
+mode_default/current/nominal/default: no rows
+mode_default/hardware_explicit_split/nominal/default: no rows
+mode_low_spin_robust/current/nominal/default: no rows
+mode_low_spin_robust/hardware_explicit_split/nominal/default: no rows

@@ -15,8 +15,10 @@ constexpr int kBtsLpwm = 33;
 constexpr int kBtsRen = 18;
 constexpr int kBtsLen = 19;
 
+constexpr int kBaseEncoderA = 4;
+constexpr int kBaseEncoderB = 5;
+
 constexpr int kBatterySenseAdc = 34;
 constexpr int kStatusLed = 2;
 
 }  // namespace board_pins
-

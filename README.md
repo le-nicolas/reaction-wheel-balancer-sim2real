@@ -49,18 +49,21 @@ What is already in place:
 - timeout and tilt ESTOP behavior
 - PlatformIO firmware scaffold for the ESP32 rig
 - telemetry comparison tooling for sim vs HIL logs
+- explicit split controller path for real hardware
+- optional base-encoder telemetry path for later outer-loop upgrades
 
 What the current stack proves:
 
 - the transport layer works
 - the dyno-style mapping workflow exists
 - the safety layer is usable for restrained bring-up
+- the runtime split controller now enforces the intended actuator roles
+- restrained bring-up can run in IMU-only mode without a base wheel encoder
 
-What still needs controller-side work:
+Current limitation:
 
-- the runtime controller still does not fully match the intended split actuation
-- pitch authority is not yet being driven into the base wheel the way the target robot needs
-- this means the remaining gap is controller allocation, not the bridge/mapping infrastructure
+- the explicit split controller is for correct hardware architecture and safe bring-up, not for beating the richer sim-oriented controller on every benchmark mode
+- the base encoder is still recommended later for position hold, drift suppression, and trajectory tracking
 
 ## Install
 
@@ -83,6 +86,12 @@ Run the real-time synthetic smoke test:
 
 ```powershell
 python final/hil_plug_play_smoke.py --bridge-backend stub
+```
+
+Run the runtime-backed smoke test:
+
+```powershell
+python final/hil_plug_play_smoke.py --bridge-backend runtime
 ```
 
 This checks:
@@ -124,6 +133,24 @@ cd esp32_rw_base_platformio
 pio run -t upload
 ```
 
+## Encoder Reality
+
+You do not need a base wheel encoder for the inner balance loop.
+
+The current hardware split is:
+
+- pitch angle and pitch rate from the IMU drive the base wheel
+- roll angle and roll rate drive the reaction wheel
+
+That is enough for restrained balance bring-up and actuator validation. Without a base encoder, the robot can still balance, but it will drift over time because there is no outer loop correcting wheel position.
+
+The base encoder becomes useful later for:
+
+- holding ground position
+- reducing long-term creep
+- tracking trajectories
+- improving sim-to-real parity for the full state-space controller
+
 ## Mapping Workflow
 
 The mapping layer is the set of values you adjust during restrained bench bring-up so the hardware behaves like the simulation.
@@ -149,6 +176,42 @@ Supporting docs:
 - `final/DYNO_MAPPING_WORKFLOW.md`
 - `final/HIL_PLUG_AND_PLAY_MATRIX.md`
 
+## Latest Benchmark
+
+Date: `2026-03-08`
+
+Benchmark run:
+
+- `100` episodes
+- profile: `fast_pr`
+- controller families: `current`, `hardware_explicit_split`
+- compare modes: `default-vs-low-spin-robust`
+
+Artifacts:
+
+- `artifacts/benchmark_20260308_152510.csv`
+- `artifacts/benchmark_20260308_152510_pareto.png`
+- `artifacts/benchmark_20260308_152510_summary.txt`
+- `artifacts/sim_vs_hardware_explicit_split_100ep.png`
+
+Plots:
+
+![Pareto benchmark](artifacts/benchmark_20260308_152510_pareto.png)
+
+![Sim vs explicit split](artifacts/sim_vs_hardware_explicit_split_100ep.png)
+
+High-level result:
+
+- both controller families survived all `100/100` nominal episodes
+- `hardware_explicit_split` now matches the intended real actuator architecture
+- `current` still scores better in `low_spin_robust`, which is expected because it is the richer sim-oriented family
+- `hardware_explicit_split` is the right branch for restrained sim-to-real bring-up and live mapping
+
+GPU note:
+
+- the machine has an NVIDIA GPU, but the MuJoCo/control benchmark path used here is CPU-bound
+- the benchmark was still run end-to-end; there was no meaningful CUDA acceleration path to enable for this workflow
+
 ## Practical Bring-Up Order
 
 1. Power the robot with the motors restrained or wheels lifted.
@@ -163,13 +226,18 @@ Supporting docs:
 
 ## Important Engineering Note
 
-The HIL/mapping infrastructure is farther along than the runtime control allocation.
+The remaining engineering gap is no longer basic actuator split.
 
-That means:
+That part is now explicit:
 
-- the bridge and live-adjustment workflow are ready
-- the safety path is ready for restrained testing
-- the remaining work is to make the runtime/exported controller give the base wheel the right authority for pitch stabilization
+- pitch goes to the base wheel
+- roll goes to the reaction wheel
+
+The remaining work is higher-order tuning:
+
+- live gain mapping against the real hardware
+- deciding how much of the richer MuJoCo controller should be preserved for onboard use
+- adding the optional base encoder outer loop when you want less drift and better position behavior
 
 ## Files To Read First
 
@@ -180,4 +248,3 @@ That means:
 - `final/DYNO_MAPPING_WORKFLOW.md`
 - `final/HIL_PLUG_AND_PLAY_MATRIX.md`
 - `esp32_rw_base_platformio/README.md`
-

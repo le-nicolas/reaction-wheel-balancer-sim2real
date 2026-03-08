@@ -419,6 +419,7 @@ def parse_args(argv=None):
             "current_dob",
             "hybrid_modern",
             "paper_split_baseline",
+            "hardware_explicit_split",
         ],
         default="current",
         help="Controller family selector. 'current_dob' uses the current stack with DOB enabled.",

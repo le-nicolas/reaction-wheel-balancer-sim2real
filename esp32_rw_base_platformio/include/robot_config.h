@@ -7,6 +7,7 @@ namespace robot_config {
 enum class ControlMode : uint8_t {
     kHilBridge = 0,
     kOnboardWheelOnly = 1,
+    kOnboardExplicitSplit = 2,
 };
 
 constexpr ControlMode kControlMode = ControlMode::kHilBridge;
@@ -16,6 +17,10 @@ constexpr bool kSendTelemetry = true;
 constexpr bool kBaseWheelEnabledInHil = true;
 constexpr bool kBaseWheelEnabledInOnboard = false;
 constexpr bool kHasBaseWheelEncoder = false;
+constexpr bool kBaseEncoderUsePullups = true;
+constexpr bool kInvertBaseEncoder = false;
+constexpr int32_t kBaseEncoderTicksPerRev = 1024;
+constexpr float kBaseWheelRadiusM = 0.035f;
 
 constexpr char kWifiSsid[] = "YOUR_WIFI_SSID";
 constexpr char kWifiPassword[] = "YOUR_WIFI_PASSWORD";
@@ -46,6 +51,13 @@ constexpr float kBasePwmLimitHil = 0.45f;
 constexpr float kBasePwmLimitOnboard = 0.20f;
 constexpr uint32_t kBasePwmFrequencyHz = 20000u;
 constexpr uint8_t kBasePwmResolutionBits = 8u;
+constexpr float kOnboardSplitPitchKp = 7.5f;
+constexpr float kOnboardSplitPitchKd = 0.9f;
+constexpr float kOnboardSplitRollKp = 5.5f;
+constexpr float kOnboardSplitRollKd = 0.7f;
+constexpr float kOnboardSplitWheelDamp = 0.015f;
+constexpr float kOnboardSplitBaseHoldKp = 2.2f;
+constexpr float kOnboardSplitBaseHoldKd = 0.35f;
 
 constexpr float kComplementaryAlpha = 0.98f;
 constexpr float kAccelPitchSign = 1.0f;
@@ -70,6 +82,8 @@ constexpr const char* ControlModeName(ControlMode mode) {
             return "hil_bridge";
         case ControlMode::kOnboardWheelOnly:
             return "onboard_wheel_only";
+        case ControlMode::kOnboardExplicitSplit:
+            return "onboard_explicit_split";
         default:
             return "unknown";
     }
@@ -80,4 +94,3 @@ constexpr bool IsHilMode() {
 }
 
 }  // namespace robot_config
-

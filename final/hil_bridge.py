@@ -95,6 +95,9 @@ class SensorSample:
     roll_rate_rad_s: float
     pitch_rate_rad_s: float
     reaction_speed_rad_s: float
+    base_pos_m: float
+    base_vel_m_s: float
+    base_encoder_valid: bool
     ts_us: int | None
     seq: int | None
 
@@ -389,13 +392,22 @@ class RuntimeControlBackend:
             sample.pitch_rate_rad_s,
             dt,
         )
+        x_pred = self.A @ self.x_est + self.B @ self.u_eff_applied
         y = np.array([pitch, roll, pitch_rate, roll_rate, sample.reaction_speed_rad_s], dtype=float)
         if self.cfg.base_state_from_sensors:
-            y = np.concatenate([y, np.zeros(4, dtype=float)])
-
-        x_pred = self.A @ self.x_est + self.B @ self.u_eff_applied
+            if sample.base_encoder_valid:
+                y = np.concatenate([y, np.array([sample.base_pos_m, 0.0, sample.base_vel_m_s, 0.0], dtype=float)])
+            else:
+                y = np.concatenate([y, np.zeros(4, dtype=float)])
         self.x_est = x_pred + self.L @ (y - self.C @ x_pred)
-        if not self.cfg.base_state_from_sensors:
+        if self.cfg.base_state_from_sensors and sample.base_encoder_valid:
+            self.x_est[5] = sample.base_pos_m
+            self.x_est[6] = 0.0
+            self.x_est[7] = sample.base_vel_m_s
+            self.x_est[8] = 0.0
+        elif self.cfg.controller_family == "hardware_explicit_split":
+            self.x_est[5:] = 0.0
+        elif not self.cfg.base_state_from_sensors:
             self.x_est[5:] = 0.0
 
         angle_mag = max(abs(float(self.x_est[0])), abs(float(self.x_est[1])))
@@ -600,6 +612,9 @@ class HILBridge:
                     "pitch_rate_dps",
                     "roll_rate_dps",
                     "reaction_speed_dps",
+                    "base_pos_m",
+                    "base_vel_m_s",
+                    "base_encoder_valid",
                     "rw_cmd_norm",
                     "drive_cmd_norm",
                     "missed_packets",
@@ -733,6 +748,9 @@ class HILBridge:
             roll_rate_rad_s=np.radians(float(packet.get("gx", 0.0)) * float(self.args.roll_rate_sign)),
             pitch_rate_rad_s=np.radians(float(packet.get("gy", 0.0)) * float(self.args.pitch_rate_sign)),
             reaction_speed_rad_s=np.radians(reaction_speed_dps * float(self.args.reaction_speed_sign)),
+            base_pos_m=float(packet.get("base_pos_m", packet.get("base_pos", 0.0))),
+            base_vel_m_s=float(packet.get("base_vel_m_s", packet.get("base_vel", 0.0))),
+            base_encoder_valid=bool(packet.get("base_encoder_valid", packet.get("base_encoder", False))),
             ts_us=int(ts_us) if ts_us is not None else None,
             seq=int(seq) if seq is not None else None,
         )
@@ -836,6 +854,9 @@ class HILBridge:
                     "pitch_rate_dps": f"{np.degrees(sample.pitch_rate_rad_s):.6f}",
                     "roll_rate_dps": f"{np.degrees(sample.roll_rate_rad_s):.6f}",
                     "reaction_speed_dps": f"{reaction_speed_dps:.6f}",
+                    "base_pos_m": f"{sample.base_pos_m:.6f}",
+                    "base_vel_m_s": f"{sample.base_vel_m_s:.6f}",
+                    "base_encoder_valid": int(sample.base_encoder_valid),
                     "rw_cmd_norm": f"{rw_norm:.6f}",
                     "drive_cmd_norm": f"{drive_norm:.6f}",
                     "missed_packets": self.missed_packets,
@@ -1120,7 +1141,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--runtime-args",
         type=str,
-        default="--mode robust --hardware-safe --control-hz 250 --controller-family current",
+        default="--mode robust --hardware-safe --control-hz 250 --controller-family hardware_explicit_split",
         help="Argument string forwarded to final/runtime_config.py parser.",
     )
     parser.add_argument("--imu-alpha", type=float, default=0.98, help="Complementary filter alpha.")
