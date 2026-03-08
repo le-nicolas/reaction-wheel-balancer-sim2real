@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<mujoco model="simple_test">
+    <option timestep="0.001" gravity="0 0 -9.81"/>
+    <default>
+        <geom friction="1"/>
+    </default>
+    <worldbody>
+        <geom type="plane" size="1 1 0.1"/>
+        <body pos="0 0 0.5">
+            <joint name="hinge1" type="hinge" axis="0 1 0"/>
+            <geom type="box" size="0.1 0.1 0.3" mass="1"/>
+        </body>
+    </worldbody>
+    <actuator>
+        <motor name="motor1" joint="hinge1" gear="1" ctrlrange="-1 1"/>
+    </actuator>
+</mujoco>

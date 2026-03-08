@@ -1,0 +1,713 @@
+
+=== LINEARIZATION ===
+A shape: (9, 9), B shape: (9, 3)
+A eigenvalues: [0.90112461+0.35434945j 0.90112461-0.35434945j 1.55952449+0.j
+ 0.59783257+0.j         0.97061069+0.j         0.99958112+0.j
+ 0.99957966+0.j         1.        +0.j         1.        +0.j        ]
+
+=== DELTA-U LQR ===
+K_du shape: (3, 12)
+
+=== VIEWER MODE ===
+mode=smooth
+easy_mode=False
+stop_on_crash=False
+seed=12345
+hardware_realistic=True control_hz=250.0 delay_steps=0 wheel_ticks=2048
+Disturbance: magnitude=0.0, interval=600
+Gravity z: -9.81
+Delta-u limits: [36.05928708  2.5         2.5       ]
+Absolute-u limits: [ 0.23873241 28.         28.        ]
+Wheel motor model: KV=900.0RPM/V R=0.220ohm Ilim=25.00A Vbus=24.00V gear=1.00 eta=0.90
+Wheel torque limit (stall/current): 0.2387 Nm
+Velocity limits: wheel=2035.75rad/s tilt_rate=16.00rad/s base_rate=2.50m/s
+Wheel torque derate starts at 75.0% of max wheel speed
+Base torque derate starts at 70.0% of max base speed
+Wheel-rate lsb @ control_dt=0.004000s: 7.669904e-01 rad/s
+XML ctrlrange low: [-2000.  -500.  -500.]
+XML ctrlrange high: [2000.  500.  500.]
+Step 100: pitch=  0.19deg roll= -0.17deg x= -0.001 y= -0.001 u_rw=     0.2 u_bx=  -0.58 u_by=  -7.44
+Step 200: pitch=  0.11deg roll=  0.30deg x= -0.004 y= -0.001 u_rw=     0.2 u_bx=   0.67 u_by=  18.25
+Step 300: pitch=  0.06deg roll=  0.21deg x= -0.008 y=  0.018 u_rw=    -0.2 u_bx=  -6.60 u_by= -28.00
+Step 400: pitch=  1.41deg roll= -1.58deg x= -0.039 y= -0.026 u_rw=    -0.2 u_bx=  -8.29 u_by=  24.50
+Step 500: pitch=  2.72deg roll=  1.46deg x= -0.094 y=  0.007 u_rw=    -0.2 u_bx= -12.73 u_by=  -7.00
+Step 600: pitch=  6.77deg roll= -1.27deg x= -0.212 y= -0.008 u_rw=    -0.2 u_bx= -28.00 u_by=  -8.00
+Step 700: pitch= 11.01deg roll=  0.33deg x= -0.411 y= -0.015 u_rw=    -0.2 u_bx= -12.60 u_by=  15.50
+Step 800: pitch= 13.46deg roll= -0.51deg x= -0.637 y= -0.007 u_rw=    -0.2 u_bx=  -6.61 u_by= -25.50
+Step 900: pitch= 15.24deg roll= -2.10deg x= -0.873 y= -0.062 u_rw=    -0.2 u_bx=  -4.16 u_by=  27.00
+Step 1000: pitch= 16.81deg roll=  0.61deg x= -1.113 y= -0.042 u_rw=    -0.2 u_bx=  -3.32 u_by= -12.00
+Step 1100: pitch= 18.39deg roll= -2.41deg x= -1.355 y= -0.081 u_rw=    -0.2 u_bx=  -2.96 u_by=  -3.00
+Step 1200: pitch= 20.07deg roll= -0.52deg x= -1.597 y= -0.099 u_rw=    -0.2 u_bx=  -2.86 u_by=   8.00
+Step 1300: pitch= 21.84deg roll= -2.24deg x= -1.840 y= -0.122 u_rw=    -0.2 u_bx=  -2.85 u_by= -23.00
+Step 1400: pitch= 23.79deg roll= -2.52deg x= -2.082 y= -0.180 u_rw=    -0.2 u_bx=  -2.66 u_by=  19.50
+
+CRASH #1 at step 1460: pitch=25.01deg roll=-1.86deg
+Step 1500: pitch= -0.01deg roll=  0.11deg x=  0.000 y=  0.001 u_rw=     0.2 u_bx=   0.87 u_by=   8.35
+Step 1600: pitch=  0.14deg roll=  0.16deg x= -0.002 y=  0.008 u_rw=     0.2 u_bx=  -2.97 u_by=  -1.89
+Step 1700: pitch=  0.42deg roll= -0.03deg x= -0.013 y=  0.006 u_rw=    -0.2 u_bx=  -4.98 u_by=   6.37
+Step 1800: pitch=  1.53deg roll= -0.27deg x= -0.045 y=  0.007 u_rw=     0.2 u_bx= -11.20 u_by=  -6.13
+Step 1900: pitch=  4.79deg roll=  0.52deg x= -0.131 y=  0.008 u_rw=    -0.2 u_bx= -28.00 u_by=  11.37
+Step 2000: pitch=  9.66deg roll= -0.76deg x= -0.308 y=  0.007 u_rw=    -0.2 u_bx= -16.81 u_by= -18.00
+Step 2100: pitch= 12.60deg roll= -0.24deg x= -0.527 y= -0.014 u_rw=    -0.2 u_bx=  -8.16 u_by=  28.00
+Step 2200: pitch= 14.54deg roll=  0.43deg x= -0.760 y=  0.010 u_rw=    -0.2 u_bx=  -4.85 u_by= -28.00
+Step 2300: pitch= 16.14deg roll= -2.79deg x= -0.999 y= -0.050 u_rw=    -0.2 u_bx=  -3.51 u_by=   7.00
+Step 2400: pitch= 17.71deg roll= -0.07deg x= -1.240 y= -0.060 u_rw=    -0.2 u_bx=  -3.09 u_by=   8.00
+Step 2500: pitch= 19.32deg roll= -1.75deg x= -1.482 y= -0.077 u_rw=    -0.2 u_bx=  -2.93 u_by= -23.00
+Step 2600: pitch= 21.06deg roll= -1.93deg x= -1.725 y= -0.128 u_rw=    -0.2 u_bx=  -2.71 u_by=  25.50
+Step 2700: pitch= 22.91deg roll= -1.11deg x= -1.968 y= -0.130 u_rw=    -0.2 u_bx=  -2.81 u_by= -28.00
+Step 2800: pitch= 24.93deg roll= -4.40deg x= -2.210 y= -0.214 u_rw=    -0.2 u_bx=  -2.61 u_by=   7.00
+
+CRASH #2 at step 2804: pitch=25.02deg roll=-4.41deg
+Step 2900: pitch=  0.12deg roll=  0.07deg x= -0.001 y=  0.001 u_rw=     0.2 u_bx=   0.09 u_by=   4.68
+Step 3000: pitch=  0.22deg roll=  0.01deg x= -0.007 y=  0.005 u_rw=     0.2 u_bx=  -4.00 u_by=  -8.07
+Step 3100: pitch=  0.64deg roll= -0.13deg x= -0.028 y= -0.001 u_rw=     0.2 u_bx=  -3.48 u_by=  14.43
+Step 3200: pitch=  1.77deg roll=  0.10deg x= -0.069 y=  0.013 u_rw=     0.2 u_bx= -13.52 u_by= -18.07
+Step 3300: pitch=  5.57deg roll= -0.35deg x= -0.174 y= -0.007 u_rw=    -0.2 u_bx= -28.00 u_by=  28.00
+Step 3400: pitch= 10.11deg roll=  1.67deg x= -0.365 y=  0.039 u_rw=    -0.2 u_bx= -14.12 u_by= -22.00
+Step 3500: pitch= 12.72deg roll= -1.64deg x= -0.588 y=  0.008 u_rw=    -0.2 u_bx=  -7.17 u_by=  -0.50
+Step 3600: pitch= 14.51deg roll=  0.60deg x= -0.823 y=  0.007 u_rw=    -0.2 u_bx=  -4.49 u_by=  10.50
+Step 3700: pitch= 16.06deg roll= -0.81deg x= -1.063 y=  0.008 u_rw=    -0.2 u_bx=  -3.47 u_by= -28.00
+Step 3800: pitch= 17.60deg roll= -1.58deg x= -1.304 y= -0.040 u_rw=    -0.2 u_bx=  -2.95 u_by=  24.50
+Step 3900: pitch= 19.20deg roll=  0.04deg x= -1.546 y= -0.027 u_rw=    -0.2 u_bx=  -2.85 u_by= -24.50
+Step 4000: pitch= 20.91deg roll= -3.06deg x= -1.789 y= -0.089 u_rw=    -0.2 u_bx=  -2.70 u_by=   7.00
+Step 4100: pitch= 22.77deg roll= -0.75deg x= -2.032 y= -0.106 u_rw=    -0.2 u_bx=  -2.78 u_by=  -2.00
+Step 4200: pitch= 24.76deg roll= -3.31deg x= -2.274 y= -0.155 u_rw=    -0.2 u_bx=  -2.80 u_by= -15.50
+
+CRASH #3 at step 4212: pitch=25.01deg roll=-3.64deg
+Step 4300: pitch=  0.01deg roll= -0.09deg x= -0.000 y= -0.001 u_rw=    -0.2 u_bx=  -0.24 u_by=   0.71
+Step 4400: pitch= -0.01deg roll=  0.04deg x=  0.000 y=  0.000 u_rw=    -0.1 u_bx=   0.84 u_by=   1.62
+Step 4500: pitch= -0.15deg roll= -0.06deg x=  0.003 y=  0.000 u_rw=     0.2 u_bx=   1.93 u_by=   0.26
+Step 4600: pitch= -0.20deg roll=  0.11deg x=  0.012 y=  0.001 u_rw=    -0.2 u_bx=   2.71 u_by=  -7.76
+Step 4700: pitch= -0.21deg roll= -0.10deg x=  0.028 y= -0.006 u_rw=    -0.2 u_bx=   2.52 u_by=  18.89
+Step 4800: pitch= -0.79deg roll= -0.14deg x=  0.058 y=  0.004 u_rw=     0.2 u_bx=   4.24 u_by= -25.50
+Step 4900: pitch= -2.29deg roll= -1.03deg x=  0.113 y= -0.031 u_rw=     0.2 u_bx=  23.48 u_by=  28.00
+Step 5000: pitch= -6.99deg roll=  1.60deg x=  0.252 y=  0.009 u_rw=    -0.2 u_bx=  24.37 u_by= -14.50
+Step 5100: pitch=-10.76deg roll= -1.27deg x=  0.459 y= -0.013 u_rw=     0.2 u_bx=  10.94 u_by=   2.00
+Step 5200: pitch=-12.96deg roll=  1.24deg x=  0.687 y=  0.001 u_rw=     0.2 u_bx=   5.98 u_by=  13.00
+Step 5300: pitch=-14.60deg roll=  0.23deg x=  0.925 y=  0.022 u_rw=     0.2 u_bx=   4.01 u_by= -19.50
+Step 5400: pitch=-16.08deg roll=  0.63deg x=  1.165 y=  0.019 u_rw=     0.2 u_bx=   3.27 u_by=  25.50
+Step 5500: pitch=-17.60deg roll=  1.95deg x=  1.407 y=  0.072 u_rw=     0.2 u_bx=   2.85 u_by= -28.00
+Step 5600: pitch=-19.18deg roll= -0.10deg x=  1.649 y=  0.060 u_rw=     0.2 u_bx=   2.83 u_by=  19.50
+Step 5700: pitch=-20.89deg roll=  3.29deg x=  1.892 y=  0.120 u_rw=     0.2 u_bx=   2.74 u_by=   3.00
+Step 5800: pitch=-22.75deg roll=  1.34deg x=  2.135 y=  0.157 u_rw=     0.2 u_bx=   2.77 u_by= -10.50
+Step 5900: pitch=-24.74deg roll=  2.82deg x=  2.377 y=  0.190 u_rw=     0.2 u_bx=   2.87 u_by=  25.50
+
+CRASH #4 at step 5913: pitch=-25.01deg roll=3.34deg
+Step 6000: pitch= -0.01deg roll=  0.31deg x=  0.000 y=  0.005 u_rw=    -0.2 u_bx=   0.06 u_by=  -5.57
+Step 6100: pitch=  0.14deg roll= -0.38deg x= -0.002 y= -0.003 u_rw=     0.2 u_bx=  -0.95 u_by=   7.00
+Step 6200: pitch=  0.14deg roll=  0.61deg x= -0.007 y=  0.009 u_rw=    -0.2 u_bx=  -2.07 u_by=  -1.05
+Step 6300: pitch=  0.81deg roll= -0.67deg x= -0.024 y= -0.002 u_rw=     0.2 u_bx=  -7.82 u_by=   7.85
+Step 6400: pitch=  2.53deg roll=  1.36deg x= -0.071 y=  0.022 u_rw=    -0.2 u_bx= -16.17 u_by=  -4.65
+Step 6500: pitch=  6.92deg roll= -1.18deg x= -0.192 y=  0.007 u_rw=     0.2 u_bx= -28.00 u_by=  -5.50
+Step 6600: pitch= 11.14deg roll=  0.68deg x= -0.391 y=  0.005 u_rw=    -0.2 u_bx= -12.49 u_by=  15.50
+Step 6700: pitch= 13.59deg roll= -0.15deg x= -0.617 y=  0.018 u_rw=    -0.2 u_bx=  -6.54 u_by= -28.00
+Step 6800: pitch= 15.37deg roll= -2.48deg x= -0.853 y= -0.044 u_rw=    -0.2 u_bx=  -4.13 u_by=  19.50
+Step 6900: pitch= 16.95deg roll=  0.73deg x= -1.093 y= -0.033 u_rw=    -0.2 u_bx=  -3.32 u_by=   0.50
+Step 7000: pitch= 18.54deg roll= -1.67deg x= -1.335 y= -0.051 u_rw=    -0.2 u_bx=  -3.03 u_by= -25.50
+Step 7100: pitch= 20.24deg roll= -2.13deg x= -1.578 y= -0.110 u_rw=    -0.2 u_bx=  -2.73 u_by=  28.00
+Step 7200: pitch= 22.03deg roll=  0.08deg x= -1.820 y= -0.095 u_rw=    -0.2 u_bx=  -2.76 u_by= -19.50
+Step 7300: pitch= 23.97deg roll= -3.59deg x= -2.062 y= -0.157 u_rw=    -0.2 u_bx=  -2.82 u_by= -15.50
+
+CRASH #5 at step 7350: pitch=25.01deg roll=-4.28deg
+Step 7400: pitch= -0.01deg roll=  0.14deg x=  0.000 y=  0.002 u_rw=    -0.2 u_bx=  -0.51 u_by=   0.85
+Step 7500: pitch=  0.11deg roll= -0.62deg x= -0.002 y= -0.005 u_rw=     0.2 u_bx=  -2.98 u_by= -10.57
+Step 7600: pitch=  0.59deg roll=  0.82deg x= -0.016 y= -0.002 u_rw=    -0.2 u_bx=  -1.35 u_by=  18.00
+Step 7700: pitch=  1.77deg roll=  0.29deg x= -0.045 y=  0.021 u_rw=    -0.2 u_bx= -22.80 u_by= -28.00
+Step 7800: pitch=  6.44deg roll= -0.41deg x= -0.160 y= -0.003 u_rw=    -0.2 u_bx= -28.00 u_by=  24.50
+Step 7900: pitch= 10.88deg roll=  0.41deg x= -0.355 y=  0.018 u_rw=    -0.2 u_bx= -13.30 u_by= -23.00
+Step 8000: pitch= 13.43deg roll= -1.19deg x= -0.579 y= -0.018 u_rw=    -0.2 u_bx=  -6.80 u_by=  24.50
+Step 8100: pitch= 15.24deg roll=  0.37deg x= -0.815 y= -0.002 u_rw=    -0.2 u_bx=  -4.32 u_by= -24.50
+Step 8200: pitch= 16.83deg roll= -2.51deg x= -1.055 y= -0.056 u_rw=    -0.2 u_bx=  -3.30 u_by=   9.50
+Step 8300: pitch= 18.42deg roll=  0.30deg x= -1.297 y= -0.057 u_rw=    -0.2 u_bx=  -3.02 u_by=   5.50
+Step 8400: pitch= 20.08deg roll= -1.65deg x= -1.539 y= -0.073 u_rw=    -0.2 u_bx=  -2.90 u_by= -28.00
+Step 8500: pitch= 21.89deg roll= -2.41deg x= -1.781 y= -0.135 u_rw=    -0.2 u_bx=  -2.65 u_by=  28.00
+Step 8600: pitch= 23.81deg roll= -0.74deg x= -2.024 y= -0.133 u_rw=    -0.2 u_bx=  -2.79 u_by= -24.50
+
+CRASH #6 at step 8659: pitch=25.01deg roll=-2.96deg
+Step 8700: pitch= -0.01deg roll= -0.07deg x= -0.000 y= -0.001 u_rw=    -0.2 u_bx=  -1.73 u_by=  -1.50
+Step 8800: pitch=  0.14deg roll= -0.36deg x= -0.003 y= -0.009 u_rw=     0.2 u_bx=  -0.27 u_by=   3.15
+Step 8900: pitch=  0.04deg roll=  0.14deg x= -0.007 y= -0.007 u_rw=    -0.2 u_bx=  -1.58 u_by=  -9.42
+Step 9000: pitch=  0.09deg roll= -0.11deg x= -0.013 y= -0.012 u_rw=    -0.2 u_bx=  -0.08 u_by=   1.50
+Step 9100: pitch=  0.06deg roll= -0.05deg x= -0.018 y= -0.012 u_rw=     0.2 u_bx=   0.34 u_by=  -6.36
+Step 9200: pitch=  0.02deg roll=  0.02deg x= -0.022 y= -0.018 u_rw=    -0.2 u_bx=  -0.19 u_by=   4.74
+Step 9300: pitch=  0.13deg roll= -0.50deg x= -0.025 y= -0.025 u_rw=     0.2 u_bx=  -0.73 u_by=   8.02
+Step 9400: pitch=  0.12deg roll=  0.81deg x= -0.030 y= -0.007 u_rw=    -0.2 u_bx=  -2.80 u_by=  -5.18
+Step 9500: pitch=  1.16deg roll= -1.52deg x= -0.052 y= -0.030 u_rw=     0.2 u_bx= -13.06 u_by=  -5.50
+Step 9600: pitch=  3.38deg roll=  0.35deg x= -0.118 y= -0.038 u_rw=    -0.2 u_bx= -14.46 u_by=  18.00
+Step 9700: pitch=  7.60deg roll=  0.35deg x= -0.250 y= -0.014 u_rw=    -0.2 u_bx= -25.88 u_by= -28.00
+Step 9800: pitch= 11.52deg roll= -1.47deg x= -0.455 y= -0.055 u_rw=    -0.2 u_bx= -11.30 u_by=  24.50
+Step 9900: pitch= 13.83deg roll=  1.31deg x= -0.683 y= -0.024 u_rw=    -0.2 u_bx=  -6.07 u_by=  -9.50
+Step 10000: pitch= 15.57deg roll= -1.77deg x= -0.920 y= -0.049 u_rw=    -0.2 u_bx=  -4.08 u_by= -13.00
+Step 10100: pitch= 17.15deg roll= -0.82deg x= -1.160 y= -0.081 u_rw=    -0.2 u_bx=  -3.26 u_by=  19.50
+Step 10200: pitch= 18.75deg roll= -1.24deg x= -1.402 y= -0.087 u_rw=    -0.2 u_bx=  -2.99 u_by= -28.00
+Step 10300: pitch= 20.45deg roll= -2.58deg x= -1.644 y= -0.150 u_rw=    -0.2 u_bx=  -2.69 u_by=  28.00
+Step 10400: pitch= 22.26deg roll= -0.38deg x= -1.887 y= -0.144 u_rw=    -0.2 u_bx=  -2.80 u_by= -17.00
+Step 10500: pitch= 24.22deg roll= -3.66deg x= -2.129 y= -0.206 u_rw=    -0.2 u_bx=  -2.71 u_by=  -3.00
+
+CRASH #7 at step 10538: pitch=25.02deg roll=-3.71deg
+Step 10600: pitch= -0.05deg roll= -0.06deg x=  0.001 y= -0.001 u_rw=    -0.2 u_bx=   0.83 u_by=  -3.83
+Step 10700: pitch= -0.35deg roll= -0.12deg x=  0.007 y= -0.004 u_rw=     0.2 u_bx=   4.72 u_by=   7.35
+Step 10800: pitch= -1.40deg roll=  0.57deg x=  0.031 y=  0.009 u_rw=     0.2 u_bx=  10.04 u_by=  -5.15
+Step 10900: pitch= -3.95deg roll= -0.78deg x=  0.098 y= -0.007 u_rw=     0.2 u_bx=  27.59 u_by=  12.35
+Step 11000: pitch= -8.95deg roll=  1.12deg x=  0.255 y=  0.019 u_rw=     0.2 u_bx=  20.52 u_by= -15.15
+Step 11100: pitch=-12.37deg roll= -1.13deg x=  0.468 y= -0.005 u_rw=     0.2 u_bx=   9.57 u_by=  12.35
+Step 11200: pitch=-14.50deg roll=  1.74deg x=  0.699 y=  0.026 u_rw=     0.2 u_bx=   5.40 u_by=   0.50
+Step 11300: pitch=-16.19deg roll= -0.49deg x=  0.937 y=  0.030 u_rw=     0.2 u_bx=   3.80 u_by= -10.50
+Step 11400: pitch=-17.79deg roll=  0.93deg x=  1.178 y=  0.032 u_rw=     0.2 u_bx=   3.19 u_by=  28.00
+Step 11500: pitch=-19.44deg roll=  1.67deg x=  1.420 y=  0.081 u_rw=     0.2 u_bx=   2.82 u_by= -28.00
+Step 11600: pitch=-21.17deg roll=  0.52deg x=  1.662 y=  0.077 u_rw=     0.2 u_bx=   2.83 u_by=  28.00
+Step 11700: pitch=-23.05deg roll=  3.73deg x=  1.905 y=  0.154 u_rw=     0.2 u_bx=   2.65 u_by=  -7.00
+
+CRASH #8 at step 11797: pitch=-25.02deg roll=1.27deg
+Step 11800: pitch= -0.00deg roll=  0.00deg x=  0.000 y=  0.000 u_rw=     0.2 u_bx=   0.30 u_by=   2.37
+Step 11900: pitch=  0.01deg roll= -0.17deg x=  0.000 y= -0.001 u_rw=     0.2 u_bx=  -0.49 u_by=  -3.96
+Step 12000: pitch=  0.09deg roll=  0.30deg x= -0.002 y= -0.002 u_rw=    -0.2 u_bx=  -0.08 u_by=   2.14
+Step 12100: pitch=  0.17deg roll= -0.97deg x= -0.004 y= -0.013 u_rw=     0.2 u_bx=  -2.27 u_by=  -3.62
+Step 12200: pitch=  0.30deg roll=  0.97deg x= -0.011 y= -0.006 u_rw=    -0.2 u_bx=   4.65 u_by=  13.00
+Step 12300: pitch=  0.26deg roll= -0.12deg x= -0.014 y=  0.008 u_rw=     0.2 u_bx= -10.66 u_by= -23.00
+Step 12400: pitch=  2.59deg roll= -0.20deg x= -0.061 y= -0.012 u_rw=    -0.2 u_bx= -17.23 u_by=  25.50
+Step 12500: pitch=  6.68deg roll=  0.77deg x= -0.178 y=  0.018 u_rw=    -0.2 u_bx= -28.00 u_by= -28.00
+Step 12600: pitch= 11.00deg roll= -1.23deg x= -0.375 y= -0.017 u_rw=    -0.2 u_bx= -12.91 u_by=  22.00
+Step 12700: pitch= 13.51deg roll=  1.36deg x= -0.600 y=  0.013 u_rw=    -0.2 u_bx=  -6.68 u_by= -12.00
+Step 12800: pitch= 15.31deg roll= -1.68deg x= -0.836 y= -0.014 u_rw=    -0.2 u_bx=  -4.30 u_by=  -5.50
+Step 12900: pitch= 16.91deg roll=  0.13deg x= -1.076 y= -0.027 u_rw=    -0.2 u_bx=  -3.37 u_by=  15.50
+Step 13000: pitch= 18.49deg roll= -0.72deg x= -1.318 y= -0.024 u_rw=    -0.2 u_bx=  -3.01 u_by= -28.00
+Step 13100: pitch= 20.18deg roll= -2.88deg x= -1.560 y= -0.094 u_rw=    -0.2 u_bx=  -2.70 u_by=  22.00
+Step 13200: pitch= 21.97deg roll= -0.73deg x= -1.802 y= -0.101 u_rw=    -0.2 u_bx=  -2.81 u_by= -17.00
+Step 13300: pitch= 23.91deg roll= -3.50deg x= -2.045 y= -0.167 u_rw=    -0.2 u_bx=  -2.65 u_by=   7.00
+
+CRASH #9 at step 13353: pitch=25.02deg roll=-2.51deg
+Step 13400: pitch=  0.03deg roll= -0.38deg x= -0.000 y= -0.005 u_rw=     0.2 u_bx=  -0.83 u_by=  -3.80
+Step 13500: pitch= -0.06deg roll=  0.95deg x=  0.000 y=  0.004 u_rw=    -0.2 u_bx=   2.78 u_by=  12.23
+Step 13600: pitch= -0.02deg roll= -0.18deg x=  0.003 y=  0.017 u_rw=     0.2 u_bx=  -9.32 u_by= -18.00
+Step 13700: pitch=  1.61deg roll= -0.66deg x= -0.028 y= -0.011 u_rw=    -0.2 u_bx=  -8.64 u_by=  28.00
+Step 13800: pitch=  3.90deg roll=  1.57deg x= -0.098 y=  0.031 u_rw=    -0.2 u_bx= -28.00 u_by= -19.50
+Step 13900: pitch=  8.84deg roll= -1.37deg x= -0.255 y=  0.004 u_rw=    -0.2 u_bx= -20.32 u_by=   4.50
+Step 14000: pitch= 12.22deg roll=  1.04deg x= -0.468 y=  0.016 u_rw=    -0.2 u_bx=  -9.51 u_by=   3.00
+Step 14100: pitch= 14.32deg roll= -1.08deg x= -0.699 y=  0.008 u_rw=    -0.2 u_bx=  -5.41 u_by= -15.50
+Step 14200: pitch= 16.00deg roll= -0.36deg x= -0.938 y= -0.016 u_rw=    -0.2 u_bx=  -3.78 u_by=  20.50
+Step 14300: pitch= 17.57deg roll= -0.64deg x= -1.178 y= -0.013 u_rw=    -0.2 u_bx=  -3.18 u_by= -28.00
+Step 14400: pitch= 19.19deg roll= -2.26deg x= -1.420 y= -0.071 u_rw=    -0.2 u_bx=  -2.79 u_by=  26.42
+Step 14500: pitch= 20.91deg roll= -0.43deg x= -1.663 y= -0.068 u_rw=    -0.2 u_bx=  -2.83 u_by= -22.00
+Step 14600: pitch= 22.76deg roll= -3.44deg x= -1.905 y= -0.136 u_rw=    -0.2 u_bx=  -2.66 u_by=   7.00
+Step 14700: pitch= 24.77deg roll= -1.25deg x= -2.148 y= -0.160 u_rw=    -0.2 u_bx=  -2.79 u_by=  -4.50
+
+CRASH #10 at step 14712: pitch=25.02deg roll=-1.25deg
+Step 14800: pitch= -0.09deg roll= -0.03deg x=  0.001 y= -0.000 u_rw=     0.2 u_bx=   1.65 u_by=   0.61
+Step 14900: pitch= -0.21deg roll=  0.07deg x=  0.005 y=  0.001 u_rw=    -0.2 u_bx=   1.35 u_by=  -3.10
+Step 15000: pitch= -0.70deg roll=  0.08deg x=  0.017 y=  0.000 u_rw=    -0.2 u_bx=   4.54 u_by=   0.24
+Step 15100: pitch= -2.29deg roll= -0.21deg x=  0.056 y=  0.001 u_rw=     0.2 u_bx=  17.56 u_by= -17.26
+Step 15200: pitch= -6.64deg roll=  0.13deg x=  0.170 y= -0.010 u_rw=     0.2 u_bx=  28.00 u_by=  28.00
+Step 15300: pitch=-11.04deg roll=  1.33deg x=  0.365 y=  0.032 u_rw=     0.2 u_bx=  13.16 u_by= -28.00
+Step 15400: pitch=-13.60deg roll= -0.80deg x=  0.590 y=  0.007 u_rw=     0.2 u_bx=   6.79 u_by=  19.50
+Step 15500: pitch=-15.42deg roll=  1.90deg x=  0.826 y=  0.046 u_rw=     0.2 u_bx=   4.29 u_by=  -9.50
+Step 15600: pitch=-17.03deg roll= -0.82deg x=  1.066 y=  0.035 u_rw=     0.2 u_bx=   3.37 u_by=  -3.00
+Step 15700: pitch=-18.62deg roll=  1.38deg x=  1.307 y=  0.046 u_rw=     0.2 u_bx=   3.04 u_by=  28.00
+Step 15800: pitch=-20.33deg roll=  2.15deg x=  1.550 y=  0.104 u_rw=     0.2 u_bx=   2.73 u_by= -28.00
+Step 15900: pitch=-22.12deg roll=  1.00deg x=  1.792 y=  0.108 u_rw=     0.2 u_bx=   2.82 u_by=  28.00
+Step 16000: pitch=-24.08deg roll=  3.67deg x=  2.035 y=  0.183 u_rw=     0.2 u_bx=   2.60 u_by= -14.50
+
+CRASH #11 at step 16044: pitch=-25.00deg roll=2.57deg
+Step 16100: pitch=  0.01deg roll= -0.13deg x= -0.000 y= -0.002 u_rw=     0.2 u_bx=   0.18 u_by=   1.34
+Step 16200: pitch=  0.05deg roll=  0.20deg x= -0.000 y=  0.001 u_rw=    -0.2 u_bx=  -0.02 u_by= -11.33
+Step 16300: pitch=  0.27deg roll= -0.70deg x= -0.003 y= -0.020 u_rw=    -0.2 u_bx=   0.74 u_by=  24.28
+Step 16400: pitch= -0.60deg roll=  1.64deg x=  0.008 y=  0.019 u_rw=    -0.2 u_bx=   3.98 u_by= -13.61
+Step 16500: pitch= -0.76deg roll= -1.48deg x=  0.023 y= -0.005 u_rw=     0.2 u_bx=  -2.41 u_by=  -5.50
+Step 16600: pitch= -1.68deg roll=  0.30deg x=  0.045 y= -0.015 u_rw=    -0.2 u_bx=  20.60 u_by=  25.50
+Step 16700: pitch= -6.34deg roll=  1.88deg x=  0.155 y=  0.038 u_rw=    -0.2 u_bx=  28.00 u_by= -27.00
+Step 16800: pitch=-10.90deg roll= -1.46deg x=  0.348 y=  0.008 u_rw=     0.2 u_bx=  13.76 u_by=   2.00
+Step 16900: pitch=-13.52deg roll=  1.13deg x=  0.572 y=  0.016 u_rw=     0.2 u_bx=   7.09 u_by=  23.00
+Step 17000: pitch=-15.38deg roll=  1.25deg x=  0.807 y=  0.059 u_rw=     0.2 u_bx=   4.38 u_by= -28.00
+Step 17100: pitch=-16.99deg roll= -0.26deg x=  1.047 y=  0.039 u_rw=     0.2 u_bx=   3.38 u_by=  27.00
+Step 17200: pitch=-18.60deg roll=  2.99deg x=  1.289 y=  0.099 u_rw=     0.2 u_bx=   2.94 u_by=  -4.50
+Step 17300: pitch=-20.29deg roll=  0.41deg x=  1.531 y=  0.115 u_rw=     0.2 u_bx=   2.88 u_by= -10.50
+Step 17400: pitch=-22.08deg roll=  1.87deg x=  1.773 y=  0.130 u_rw=     0.2 u_bx=   2.86 u_by=  28.00
+Step 17500: pitch=-24.05deg roll=  2.97deg x=  2.016 y=  0.198 u_rw=     0.2 u_bx=   2.57 u_by= -28.00
+
+CRASH #12 at step 17547: pitch=-25.02deg roll=1.61deg
+Step 17600: pitch=  0.02deg roll= -0.17deg x= -0.000 y= -0.003 u_rw=    -0.2 u_bx=  -0.31 u_by=  -3.56
+Step 17700: pitch= -0.01deg roll=  0.10deg x=  0.001 y= -0.004 u_rw=    -0.2 u_bx=   1.92 u_by=   7.06
+Step 17800: pitch= -0.24deg roll= -0.73deg x=  0.009 y= -0.009 u_rw=     0.2 u_bx=   2.33 u_by=  -9.22
+Step 17900: pitch= -1.20deg roll=  0.75deg x=  0.032 y= -0.008 u_rw=    -0.2 u_bx=  12.53 u_by=  20.50
+Step 18000: pitch= -4.49deg roll=  0.50deg x=  0.114 y=  0.020 u_rw=     0.2 u_bx=  24.92 u_by= -28.00
+Step 18100: pitch= -9.35deg roll= -0.50deg x=  0.284 y= -0.005 u_rw=     0.2 u_bx=  18.02 u_by=  27.00
+Step 18200: pitch=-12.45deg roll=  1.71deg x=  0.501 y=  0.039 u_rw=     0.2 u_bx=   8.60 u_by= -19.50
+Step 18300: pitch=-14.44deg roll= -1.13deg x=  0.733 y=  0.015 u_rw=     0.2 u_bx=   5.02 u_by=   7.00
+Step 18400: pitch=-16.07deg roll=  1.67deg x=  0.972 y=  0.038 u_rw=     0.2 u_bx=   3.66 u_by=   8.00
+Step 18500: pitch=-17.64deg roll=  0.40deg x=  1.213 y=  0.058 u_rw=     0.2 u_bx=   3.11 u_by=  -9.50
+Step 18600: pitch=-19.26deg roll=  1.95deg x=  1.455 y=  0.081 u_rw=     0.2 u_bx=   2.94 u_by=  18.00
+Step 18700: pitch=-21.00deg roll=  1.58deg x=  1.698 y=  0.126 u_rw=     0.2 u_bx=   2.75 u_by= -23.00
+Step 18800: pitch=-22.85deg roll=  1.59deg x=  1.940 y=  0.136 u_rw=     0.2 u_bx=   2.84 u_by=  28.00
+Step 18900: pitch=-24.87deg roll=  4.19deg x=  2.183 y=  0.223 u_rw=     0.2 u_bx=   2.55 u_by= -17.00
+
+CRASH #13 at step 18906: pitch=-25.00deg roll=4.11deg
+Step 19000: pitch= -0.02deg roll=  0.12deg x= -0.000 y=  0.005 u_rw=    -0.2 u_bx=  -1.23 u_by= -14.71
+Step 19100: pitch= -0.20deg roll= -0.29deg x= -0.000 y= -0.010 u_rw=     0.2 u_bx=   5.90 u_by=  16.07
+Step 19200: pitch= -1.42deg roll=  0.46deg x=  0.020 y=  0.008 u_rw=     0.2 u_bx=   9.60 u_by= -26.43
+Step 19300: pitch= -4.18deg roll= -0.88deg x=  0.087 y= -0.021 u_rw=     0.2 u_bx=  28.00 u_by=  27.00
+Step 19400: pitch= -9.21deg roll=  1.47deg x=  0.246 y=  0.016 u_rw=    -0.2 u_bx=  20.12 u_by= -17.00
+Step 19500: pitch=-12.63deg roll= -0.90deg x=  0.459 y= -0.003 u_rw=     0.2 u_bx=   9.45 u_by=  12.00
+Step 19600: pitch=-14.76deg roll=  1.71deg x=  0.690 y=  0.028 u_rw=     0.2 u_bx=   5.34 u_by=  -4.50
+Step 19700: pitch=-16.47deg roll= -0.58deg x=  0.929 y=  0.024 u_rw=     0.2 u_bx=   3.77 u_by=  -0.50
+Step 19800: pitch=-18.08deg roll=  1.77deg x=  1.169 y=  0.046 u_rw=     0.2 u_bx=   3.19 u_by=  15.50
+Step 19900: pitch=-19.76deg roll=  1.01deg x=  1.412 y=  0.082 u_rw=     0.2 u_bx=   2.88 u_by= -23.00
+Step 20000: pitch=-21.52deg roll=  0.99deg x=  1.654 y=  0.082 u_rw=     0.2 u_bx=   2.86 u_by=  28.00
+Step 20100: pitch=-23.44deg roll=  3.12deg x=  1.897 y=  0.151 u_rw=     0.2 u_bx=   2.60 u_by= -22.00
+
+CRASH #14 at step 20177: pitch=-25.00deg roll=1.09deg
+Step 20200: pitch=  0.01deg roll= -0.05deg x= -0.000 y= -0.001 u_rw=     0.2 u_bx=   0.57 u_by=   0.76
+Step 20300: pitch=  0.01deg roll= -0.16deg x=  0.000 y= -0.004 u_rw=     0.2 u_bx=   0.74 u_by=   8.05
+Step 20400: pitch= -0.23deg roll=  0.06deg x=  0.006 y=  0.001 u_rw=    -0.2 u_bx=   2.23 u_by=  -7.68
+Step 20500: pitch= -0.18deg roll=  0.20deg x=  0.017 y= -0.002 u_rw=    -0.2 u_bx=   4.95 u_by=   8.01
+Step 20600: pitch= -1.00deg roll= -0.44deg x=  0.046 y=  0.000 u_rw=     0.2 u_bx=   7.32 u_by= -14.49
+Step 20700: pitch= -3.19deg roll=  0.11deg x=  0.110 y= -0.012 u_rw=    -0.2 u_bx=  27.69 u_by=  25.50
+Step 20800: pitch= -8.13deg roll=  1.09deg x=  0.265 y=  0.026 u_rw=     0.2 u_bx=  20.90 u_by= -28.00
+Step 20900: pitch=-11.55deg roll= -1.14deg x=  0.477 y= -0.005 u_rw=     0.2 u_bx=   9.72 u_by=  19.50
+Step 21000: pitch=-13.63deg roll=  1.86deg x=  0.708 y=  0.032 u_rw=     0.2 u_bx=   5.45 u_by=  -4.50
+Step 21100: pitch=-15.25deg roll= -0.47deg x=  0.946 y=  0.031 u_rw=     0.2 u_bx=   3.82 u_by=  -0.50
+Step 21200: pitch=-16.77deg roll=  1.70deg x=  1.186 y=  0.053 u_rw=     0.2 u_bx=   3.21 u_by=  15.50
+Step 21300: pitch=-18.33deg roll=  0.98deg x=  1.428 y=  0.088 u_rw=     0.2 u_bx=   2.91 u_by= -15.50
+Step 21400: pitch=-19.98deg roll=  1.87deg x=  1.671 y=  0.107 u_rw=     0.2 u_bx=   2.87 u_by=  25.50
+Step 21500: pitch=-21.77deg roll=  2.29deg x=  1.913 y=  0.165 u_rw=     0.2 u_bx=   2.66 u_by= -25.50
+Step 21600: pitch=-23.68deg roll=  1.45deg x=  2.156 y=  0.173 u_rw=     0.2 u_bx=   2.82 u_by=  28.00
+
+CRASH #15 at step 21665: pitch=-25.01deg roll=3.87deg
+Step 21700: pitch= -0.00deg roll=  0.05deg x=  0.000 y=  0.001 u_rw=    -0.2 u_bx=  -1.13 u_by=  -2.71
+Step 21800: pitch= -0.05deg roll=  0.06deg x=  0.001 y= -0.002 u_rw=     0.2 u_bx=   2.63 u_by=  10.28
+Step 21900: pitch= -0.16deg roll= -0.51deg x=  0.006 y= -0.007 u_rw=     0.2 u_bx=   1.05 u_by=  -5.51
+Step 22000: pitch= -0.29deg roll=  1.29deg x=  0.015 y=  0.006 u_rw=    -0.2 u_bx=   5.66 u_by=  10.41
+Step 22100: pitch= -0.76deg roll= -0.06deg x=  0.039 y=  0.019 u_rw=     0.2 u_bx=  -4.88 u_by= -20.50
+Step 22200: pitch= -0.14deg roll= -0.37deg x=  0.048 y= -0.007 u_rw=     0.2 u_bx=   4.27 u_by=  28.00
+Step 22300: pitch= -1.28deg roll=  1.17deg x=  0.077 y=  0.027 u_rw=     0.2 u_bx=   7.14 u_by= -27.00
+Step 22400: pitch= -2.55deg roll= -1.55deg x=  0.130 y= -0.013 u_rw=     0.2 u_bx=  15.54 u_by=  12.00
+Step 22500: pitch= -6.88deg roll=  1.57deg x=  0.255 y=  0.008 u_rw=     0.2 u_bx=  28.00 u_by=   8.00
+Step 22600: pitch=-11.01deg roll= -0.06deg x=  0.456 y=  0.020 u_rw=     0.2 u_bx=  12.14 u_by= -20.50
+Step 22700: pitch=-13.40deg roll= -0.03deg x=  0.683 y=  0.000 u_rw=     0.2 u_bx=   6.39 u_by=  28.00
+Step 22800: pitch=-15.14deg roll=  1.25deg x=  0.919 y=  0.036 u_rw=     0.2 u_bx=   4.12 u_by= -28.00
+Step 22900: pitch=-16.69deg roll= -0.12deg x=  1.159 y=  0.017 u_rw=     0.2 u_bx=   3.29 u_by=  27.00
+Step 23000: pitch=-18.26deg roll=  2.69deg x=  1.401 y=  0.072 u_rw=     0.2 u_bx=   2.88 u_by= -12.00
+Step 23100: pitch=-19.92deg roll=  0.29deg x=  1.643 y=  0.074 u_rw=     0.2 u_bx=   2.86 u_by=   7.00
+Step 23200: pitch=-21.67deg roll=  3.14deg x=  1.886 y=  0.121 u_rw=     0.2 u_bx=   2.78 u_by=   8.00
+Step 23300: pitch=-23.61deg roll=  1.73deg x=  2.129 y=  0.160 u_rw=     0.2 u_bx=   2.75 u_by= -13.00
+
+CRASH #16 at step 23369: pitch=-25.01deg roll=1.77deg
+Step 23400: pitch= -0.01deg roll=  0.03deg x=  0.000 y=  0.000 u_rw=    -0.2 u_bx=   0.02 u_by=  -0.41
+Step 23500: pitch= -0.15deg roll=  0.09deg x=  0.002 y=  0.000 u_rw=    -0.2 u_bx=   1.36 u_by=   1.47
+Step 23600: pitch= -0.20deg roll= -0.27deg x=  0.008 y= -0.005 u_rw=     0.2 u_bx=   2.16 u_by=  13.65
+Step 23700: pitch= -0.53deg roll= -0.05deg x=  0.025 y=  0.002 u_rw=     0.2 u_bx=   4.01 u_by= -16.92
+Step 23800: pitch= -1.69deg roll=  0.43deg x=  0.061 y= -0.002 u_rw=    -0.2 u_bx=  15.17 u_by=  15.58
+Step 23900: pitch= -5.56deg roll= -0.23deg x=  0.164 y=  0.006 u_rw=     0.2 u_bx=  28.00 u_by= -21.92
+Step 24000: pitch=-10.17deg roll= -0.10deg x=  0.352 y= -0.013 u_rw=     0.2 u_bx=  14.51 u_by=  25.50
+Step 24100: pitch=-12.84deg roll=  0.93deg x=  0.575 y=  0.019 u_rw=     0.2 u_bx=   7.29 u_by= -27.00
+Step 24200: pitch=-14.66deg roll= -0.46deg x=  0.810 y= -0.003 u_rw=     0.2 u_bx=   4.51 u_by=  27.00
+Step 24300: pitch=-16.23deg roll=  2.64deg x=  1.049 y=  0.052 u_rw=     0.2 u_bx=   3.38 u_by=  -7.00
+Step 24400: pitch=-17.78deg roll= -0.01deg x=  1.291 y=  0.059 u_rw=     0.2 u_bx=   3.04 u_by=  -5.50
+Step 24500: pitch=-19.39deg roll=  1.94deg x=  1.533 y=  0.079 u_rw=     0.2 u_bx=   2.92 u_by=  25.50
+Step 24600: pitch=-21.14deg roll=  2.59deg x=  1.776 y=  0.142 u_rw=     0.2 u_bx=   2.65 u_by= -28.00
+Step 24700: pitch=-23.00deg roll=  1.48deg x=  2.018 y=  0.151 u_rw=     0.2 u_bx=   2.82 u_by=  28.00
+
+CRASH #17 at step 24799: pitch=-25.01deg roll=4.10deg
+Step 24800: pitch=  0.00deg roll= -0.00deg x= -0.000 y= -0.000 u_rw=    -0.2 u_bx=  -0.61 u_by=  -2.37
+Step 24900: pitch= -0.01deg roll=  0.03deg x=  0.001 y=  0.001 u_rw=    -0.2 u_bx=  -0.69 u_by=  -9.47
+Step 25000: pitch=  0.04deg roll= -0.06deg x=  0.000 y= -0.008 u_rw=    -0.2 u_bx=   0.77 u_by=  16.26
+Step 25100: pitch= -0.23deg roll= -0.51deg x=  0.006 y= -0.008 u_rw=     0.2 u_bx=   1.45 u_by=  -9.34
+Step 25200: pitch= -1.05deg roll=  0.93deg x=  0.024 y= -0.003 u_rw=    -0.2 u_bx=  11.76 u_by=  18.00
+Step 25300: pitch= -3.53deg roll=  0.37deg x=  0.087 y=  0.021 u_rw=     0.2 u_bx=  16.57 u_by= -28.00
+Step 25400: pitch= -7.87deg roll= -0.32deg x=  0.223 y= -0.002 u_rw=     0.2 u_bx=  25.24 u_by=  28.00
+Step 25500: pitch=-11.75deg roll=  2.14deg x=  0.428 y=  0.048 u_rw=     0.2 u_bx=  11.09 u_by= -17.00
+Step 25600: pitch=-14.06deg roll= -0.97deg x=  0.656 y=  0.030 u_rw=     0.2 u_bx=   6.02 u_by=  -0.50
+Step 25700: pitch=-15.81deg roll=  1.39deg x=  0.893 y=  0.041 u_rw=     0.2 u_bx=   4.06 u_by=  15.50
+Step 25800: pitch=-17.41deg roll=  0.61deg x=  1.134 y=  0.067 u_rw=     0.2 u_bx=   3.24 u_by= -20.50
+Step 25900: pitch=-19.02deg roll=  0.90deg x=  1.376 y=  0.064 u_rw=     0.2 u_bx=   2.98 u_by=  25.50
+Step 26000: pitch=-20.75deg roll=  2.60deg x=  1.618 y=  0.123 u_rw=     0.2 u_bx=   2.70 u_by= -22.00
+Step 26100: pitch=-22.58deg roll=  0.91deg x=  1.861 y=  0.126 u_rw=     0.2 u_bx=   2.81 u_by=  22.00
+Step 26200: pitch=-24.58deg roll=  4.11deg x=  2.103 y=  0.200 u_rw=     0.2 u_bx=   2.64 u_by=  -4.50
+
+CRASH #18 at step 26220: pitch=-25.00deg roll=4.08deg
+Step 26300: pitch=  0.06deg roll= -0.06deg x= -0.001 y= -0.001 u_rw=    -0.2 u_bx=  -0.89 u_by=  -3.88
+Step 26400: pitch=  0.21deg roll=  0.57deg x= -0.006 y=  0.004 u_rw=    -0.2 u_bx=  -3.03 u_by=   2.78
+Step 26500: pitch=  0.87deg roll= -0.73deg x= -0.024 y= -0.003 u_rw=     0.2 u_bx=  -9.69 u_by=   1.87
+Step 26600: pitch=  3.09deg roll=  0.40deg x= -0.082 y= -0.000 u_rw=    -0.2 u_bx= -18.99 u_by=   9.37
+Step 26700: pitch=  7.75deg roll= -0.82deg x= -0.221 y= -0.006 u_rw=    -0.2 u_bx= -24.51 u_by=  -8.13
+Step 26800: pitch= 11.55deg roll=  0.61deg x= -0.427 y= -0.006 u_rw=    -0.2 u_bx= -10.95 u_by=   9.37
+Step 26900: pitch= 13.81deg roll= -0.87deg x= -0.656 y= -0.009 u_rw=    -0.2 u_bx=  -5.96 u_by= -18.00
+Step 27000: pitch= 15.52deg roll= -0.35deg x= -0.893 y= -0.032 u_rw=    -0.2 u_bx=  -4.01 u_by=  20.50
+Step 27100: pitch= 17.08deg roll= -0.62deg x= -1.134 y= -0.027 u_rw=    -0.2 u_bx=  -3.26 u_by= -28.00
+Step 27200: pitch= 18.68deg roll= -2.22deg x= -1.375 y= -0.084 u_rw=    -0.2 u_bx=  -2.83 u_by=  27.00
+Step 27300: pitch= 20.36deg roll= -0.13deg x= -1.618 y= -0.076 u_rw=    -0.2 u_bx=  -2.82 u_by= -19.50
+Step 27400: pitch= 22.17deg roll= -3.52deg x= -1.860 y= -0.140 u_rw=    -0.2 u_bx=  -2.76 u_by=  -5.50
+Step 27500: pitch= 24.14deg roll= -1.84deg x= -2.103 y= -0.185 u_rw=    -0.2 u_bx=  -2.77 u_by=  10.50
+
+CRASH #19 at step 27543: pitch=25.02deg roll=-1.50deg
+Step 27600: pitch= -0.03deg roll=  0.12deg x=  0.000 y=  0.002 u_rw=     0.2 u_bx=   1.88 u_by=   1.29
+Step 27700: pitch= -0.28deg roll= -0.45deg x=  0.005 y= -0.006 u_rw=     0.2 u_bx=   2.85 u_by=   0.26
+Step 27800: pitch= -0.70deg roll=  0.31deg x=  0.021 y= -0.005 u_rw=    -0.2 u_bx=   8.00 u_by=   1.10
+Step 27900: pitch= -2.83deg roll= -0.45deg x=  0.076 y= -0.006 u_rw=     0.2 u_bx=  20.52 u_by=  -6.40
+Step 28000: pitch= -7.42deg roll=  0.56deg x=  0.211 y= -0.005 u_rw=     0.2 u_bx=  25.64 u_by=   6.10
+Step 28100: pitch=-11.31deg roll= -0.36deg x=  0.416 y= -0.001 u_rw=     0.2 u_bx=  11.28 u_by=  -1.40
+Step 28200: pitch=-13.59deg roll=  1.69deg x=  0.644 y=  0.023 u_rw=     0.2 u_bx=   6.08 u_by=  11.10
+Step 28300: pitch=-15.30deg roll=  0.38deg x=  0.881 y=  0.047 u_rw=     0.2 u_bx=   4.06 u_by= -25.50
+Step 28400: pitch=-16.86deg roll=  0.03deg x=  1.121 y=  0.030 u_rw=     0.2 u_bx=   3.26 u_by=  28.00
+Step 28500: pitch=-18.43deg roll=  2.78deg x=  1.363 y=  0.092 u_rw=     0.2 u_bx=   2.85 u_by= -14.50
+Step 28600: pitch=-20.10deg roll=  0.57deg x=  1.605 y=  0.101 u_rw=     0.2 u_bx=   2.85 u_by=  12.00
+Step 28700: pitch=-21.88deg roll=  3.49deg x=  1.848 y=  0.162 u_rw=     0.2 u_bx=   2.74 u_by=   3.00
+Step 28800: pitch=-23.82deg roll=  1.58deg x=  2.090 y=  0.200 u_rw=     0.2 u_bx=   2.76 u_by= -13.00
+
+CRASH #20 at step 28858: pitch=-25.01deg roll=1.32deg
+Step 28900: pitch= -0.01deg roll=  0.12deg x=  0.000 y=  0.001 u_rw=    -0.2 u_bx=  -0.22 u_by=   1.04
+Step 29000: pitch= -0.17deg roll= -0.30deg x=  0.001 y= -0.003 u_rw=     0.2 u_bx=  -0.12 u_by=   2.07
+Step 29100: pitch= -0.09deg roll=  0.13deg x=  0.002 y= -0.000 u_rw=    -0.2 u_bx=   2.14 u_by= -14.77
+Step 29200: pitch= -0.55deg roll= -0.72deg x=  0.015 y= -0.021 u_rw=    -0.0 u_bx=   5.45 u_by=  17.42
+Step 29300: pitch= -2.56deg roll=  1.37deg x=  0.060 y=  0.010 u_rw=    -0.2 u_bx=  19.46 u_by= -15.08
+Step 29400: pitch= -6.96deg roll= -1.64deg x=  0.183 y= -0.020 u_rw=     0.2 u_bx=  28.00 u_by=  -0.50
+Step 29500: pitch=-11.18deg roll=  0.65deg x=  0.382 y= -0.021 u_rw=     0.2 u_bx=  12.47 u_by=  20.50
+Step 29600: pitch=-13.62deg roll=  0.41deg x=  0.609 y=  0.004 u_rw=     0.2 u_bx=   6.50 u_by= -23.00
+Step 29700: pitch=-15.40deg roll= -0.14deg x=  0.845 y= -0.014 u_rw=     0.2 u_bx=   4.20 u_by=  28.00
+Step 29800: pitch=-16.99deg roll=  2.94deg x=  1.085 y=  0.050 u_rw=     0.2 u_bx=   3.24 u_by=  -9.50
+Step 29900: pitch=-18.58deg roll=  0.03deg x=  1.327 y=  0.058 u_rw=     0.2 u_bx=   2.99 u_by=  -8.00
+Step 30000: pitch=-20.26deg roll=  1.75deg x=  1.569 y=  0.074 u_rw=     0.2 u_bx=   2.90 u_by=  23.00
+Step 30100: pitch=-22.08deg roll=  2.49deg x=  1.812 y=  0.135 u_rw=     0.2 u_bx=   2.64 u_by= -25.50
+Step 30200: pitch=-24.01deg roll=  0.56deg x=  2.054 y=  0.129 u_rw=     0.2 u_bx=   2.78 u_by=  22.00
+
+CRASH #21 at step 30249: pitch=-25.02deg roll=2.29deg
+Step 30300: pitch=  0.02deg roll= -0.11deg x= -0.000 y= -0.002 u_rw=    -0.2 u_bx=  -0.31 u_by=  -1.32
+Step 30400: pitch= -0.01deg roll=  0.05deg x=  0.000 y= -0.001 u_rw=     0.2 u_bx=  -0.11 u_by=   1.25
+Step 30500: pitch=  0.12deg roll= -0.29deg x= -0.002 y= -0.007 u_rw=     0.2 u_bx=  -0.96 u_by=   4.06
+Step 30600: pitch=  0.10deg roll=  0.05deg x= -0.004 y= -0.003 u_rw=     0.2 u_bx=   1.66 u_by=  -8.22
+Step 30700: pitch=  0.05deg roll= -0.04deg x= -0.005 y= -0.007 u_rw=    -0.2 u_bx=  -0.01 u_by=   7.74
+Step 30800: pitch=  0.07deg roll= -0.22deg x= -0.006 y= -0.003 u_rw=    -0.2 u_bx=  -1.54 u_by= -13.26
+Step 30900: pitch=  0.14deg roll= -0.25deg x= -0.007 y= -0.014 u_rw=    -0.2 u_bx=   2.20 u_by=   7.63
+Step 31000: pitch= -0.21deg roll=  0.25deg x= -0.000 y= -0.003 u_rw=    -0.2 u_bx=   1.92 u_by=  -8.16
+Step 31100: pitch= -0.61deg roll= -0.25deg x=  0.015 y= -0.009 u_rw=     0.2 u_bx=   4.98 u_by=   3.31
+Step 31200: pitch= -2.04deg roll=  0.29deg x=  0.053 y=  0.001 u_rw=     0.2 u_bx=  15.26 u_by= -19.19
+Step 31300: pitch= -5.95deg roll= -0.59deg x=  0.157 y= -0.019 u_rw=     0.2 u_bx=  28.00 u_by=  28.00
+Step 31400: pitch=-10.51deg roll=  1.32deg x=  0.347 y=  0.020 u_rw=     0.2 u_bx=  14.19 u_by= -22.00
+Step 31500: pitch=-13.17deg roll= -0.88deg x=  0.570 y= -0.002 u_rw=     0.2 u_bx=   7.19 u_by=  17.00
+Step 31600: pitch=-15.02deg roll=  1.85deg x=  0.805 y=  0.037 u_rw=     0.2 u_bx=   4.45 u_by=  -7.00
+Step 31700: pitch=-16.62deg roll= -0.58deg x=  1.045 y=  0.033 u_rw=     0.2 u_bx=   3.43 u_by=  -0.50
+Step 31800: pitch=-18.19deg roll=  1.80deg x=  1.286 y=  0.056 u_rw=     0.2 u_bx=   3.07 u_by=  18.00
+Step 31900: pitch=-19.86deg roll=  1.36deg x=  1.529 y=  0.100 u_rw=     0.2 u_bx=   2.82 u_by= -23.00
+Step 32000: pitch=-21.62deg roll=  1.37deg x=  1.771 y=  0.110 u_rw=     0.2 u_bx=   2.84 u_by=  28.00
+Step 32100: pitch=-23.54deg roll=  3.00deg x=  2.014 y=  0.180 u_rw=     0.2 u_bx=   2.58 u_by= -27.00
+
+CRASH #22 at step 32172: pitch=-25.01deg roll=1.30deg
+Step 32200: pitch= -0.01deg roll=  0.07deg x=  0.000 y=  0.001 u_rw=    -0.2 u_bx=  -0.31 u_by=   1.41
+Step 32300: pitch=  0.03deg roll= -0.23deg x= -0.000 y= -0.000 u_rw=     0.2 u_bx=  -0.58 u_by= -10.22
+Step 32400: pitch=  0.15deg roll=  0.42deg x= -0.004 y=  0.001 u_rw=    -0.2 u_bx=  -0.35 u_by=   0.65
+Step 32500: pitch=  0.19deg roll= -1.17deg x= -0.008 y= -0.016 u_rw=     0.2 u_bx=  -1.95 u_by=  -0.49
+Step 32600: pitch= -0.14deg roll=  1.00deg x= -0.009 y= -0.007 u_rw=    -0.2 u_bx=   6.90 u_by=   8.00
+Step 32700: pitch= -1.30deg roll= -0.65deg x=  0.015 y= -0.004 u_rw=     0.2 u_bx=   3.24 u_by= -20.50
+Step 32800: pitch= -3.16deg roll= -0.44deg x=  0.064 y= -0.030 u_rw=     0.2 u_bx=  28.00 u_by=  28.00
+Step 32900: pitch= -8.18deg roll=  1.38deg x=  0.206 y=  0.011 u_rw=     0.2 u_bx=  24.04 u_by= -24.50
+Step 33000: pitch=-12.02deg roll= -1.13deg x=  0.412 y= -0.016 u_rw=     0.2 u_bx=  10.83 u_by=  14.50
+Step 33100: pitch=-14.30deg roll=  1.97deg x=  0.641 y=  0.019 u_rw=     0.2 u_bx=   5.90 u_by=   3.00
+Step 33200: pitch=-16.05deg roll= -0.15deg x=  0.878 y=  0.032 u_rw=     0.2 u_bx=   4.00 u_by= -18.00
+Step 33300: pitch=-17.66deg roll=  0.40deg x=  1.119 y=  0.022 u_rw=     0.2 u_bx=   3.25 u_by=  28.00
+Step 33400: pitch=-19.30deg roll=  2.74deg x=  1.361 y=  0.087 u_rw=     0.2 u_bx=   2.81 u_by= -19.50
+Step 33500: pitch=-21.03deg roll=  0.35deg x=  1.603 y=  0.090 u_rw=     0.2 u_bx=   2.85 u_by=  12.00
+Step 33600: pitch=-22.89deg roll=  3.64deg x=  1.846 y=  0.151 u_rw=     0.2 u_bx=   2.81 u_by=  13.00
+Step 33700: pitch=-24.93deg roll=  2.65deg x=  2.089 y=  0.216 u_rw=     0.2 u_bx=   2.69 u_by= -28.00
+
+CRASH #23 at step 33704: pitch=-25.01deg roll=2.50deg
+Step 33800: pitch=  0.03deg roll= -0.30deg x= -0.000 y= -0.005 u_rw=     0.2 u_bx=  -0.04 u_by=   1.49
+Step 33900: pitch=  0.07deg roll=  0.79deg x= -0.001 y=  0.009 u_rw=    -0.2 u_bx=  -0.40 u_by=  -7.74
+Step 34000: pitch=  0.54deg roll= -0.85deg x= -0.008 y= -0.007 u_rw=     0.2 u_bx=  -4.06 u_by=  10.90
+Step 34100: pitch=  1.68deg roll=  1.12deg x= -0.036 y=  0.016 u_rw=    -0.2 u_bx= -10.95 u_by= -12.00
+Step 34200: pitch=  5.18deg roll= -1.50deg x= -0.121 y= -0.011 u_rw=     0.2 u_bx= -28.00 u_by=   4.50
+Step 34300: pitch= 10.11deg roll=  1.10deg x= -0.298 y=  0.001 u_rw=    -0.2 u_bx= -16.63 u_by=   8.00
+Step 34400: pitch= 13.09deg roll= -0.53deg x= -0.517 y=  0.007 u_rw=    -0.2 u_bx=  -8.17 u_by= -25.50
+Step 34500: pitch= 15.06deg roll= -0.90deg x= -0.751 y= -0.028 u_rw=    -0.2 u_bx=  -4.82 u_by=  25.50
+Step 34600: pitch= 16.71deg roll= -0.03deg x= -0.990 y= -0.014 u_rw=    -0.2 u_bx=  -3.56 u_by= -28.00
+Step 34700: pitch= 18.33deg roll= -2.06deg x= -1.231 y= -0.064 u_rw=    -0.2 u_bx=  -2.98 u_by=  22.00
+Step 34800: pitch= 20.00deg roll= -0.12deg x= -1.473 y= -0.058 u_rw=    -0.2 u_bx=  -2.87 u_by= -19.50
+Step 34900: pitch= 21.78deg roll= -3.29deg x= -1.716 y= -0.120 u_rw=    -0.2 u_bx=  -2.72 u_by=   2.00
+Step 35000: pitch= 23.71deg roll= -1.34deg x= -1.958 y= -0.150 u_rw=    -0.2 u_bx=  -2.78 u_by=   4.50
+
+CRASH #24 at step 35064: pitch=25.02deg roll=-2.03deg
+Step 35100: pitch=  0.00deg roll=  0.01deg x= -0.000 y=  0.000 u_rw=     0.2 u_bx=   0.65 u_by=   2.12
+Step 35200: pitch= -0.14deg roll= -0.28deg x=  0.001 y= -0.005 u_rw=     0.2 u_bx=   1.95 u_by=   9.35
+Step 35300: pitch= -0.42deg roll=  0.58deg x=  0.010 y=  0.012 u_rw=    -0.2 u_bx=   0.92 u_by= -21.36
+Step 35400: pitch= -0.89deg roll= -1.17deg x=  0.027 y= -0.019 u_rw=     0.2 u_bx=   9.05 u_by=  20.70
+Step 35500: pitch= -3.71deg roll=  1.38deg x=  0.089 y=  0.012 u_rw=    -0.2 u_bx=  28.00 u_by= -12.00
+Step 35600: pitch= -8.84deg roll= -1.72deg x=  0.247 y= -0.015 u_rw=     0.2 u_bx=  20.45 u_by=  -8.00
+Step 35700: pitch=-12.26deg roll= -0.06deg x=  0.460 y= -0.033 u_rw=     0.2 u_bx=   9.59 u_by=  28.00
+Step 35800: pitch=-14.37deg roll=  0.79deg x=  0.691 y= -0.001 u_rw=     0.2 u_bx=   5.38 u_by= -20.67
+Step 35900: pitch=-16.05deg roll=  0.04deg x=  0.929 y= -0.010 u_rw=     0.2 u_bx=   3.78 u_by=  28.00
+Step 36000: pitch=-17.63deg roll=  2.51deg x=  1.170 y=  0.051 u_rw=     0.2 u_bx=   3.06 u_by= -17.00
+Step 36100: pitch=-19.26deg roll= -0.12deg x=  1.412 y=  0.049 u_rw=     0.2 u_bx=   2.90 u_by=   7.00
+Step 36200: pitch=-20.98deg roll=  2.82deg x=  1.654 y=  0.095 u_rw=     0.2 u_bx=   2.85 u_by=  13.00
+Step 36300: pitch=-22.86deg roll=  1.80deg x=  1.897 y=  0.146 u_rw=     0.2 u_bx=   2.73 u_by= -23.00
+Step 36400: pitch=-24.86deg roll=  1.82deg x=  2.139 y=  0.161 u_rw=     0.2 u_bx=   2.85 u_by=  28.00
+
+CRASH #25 at step 36407: pitch=-25.00deg roll=2.10deg
+Step 36500: pitch= -0.01deg roll=  0.21deg x=  0.000 y=  0.003 u_rw=    -0.2 u_bx=  -0.12 u_by=  -1.05
+Step 36600: pitch= -0.16deg roll= -0.13deg x=  0.001 y= -0.001 u_rw=    -0.2 u_bx=  -1.25 u_by=   6.15
+Step 36700: pitch= -0.11deg roll=  0.03deg x= -0.001 y=  0.006 u_rw=     0.2 u_bx=  -0.50 u_by=  -9.84
+Step 36800: pitch= -0.02deg roll=  0.35deg x= -0.004 y=  0.001 u_rw=    -0.2 u_bx=   1.13 u_by=  10.96
+Step 36900: pitch= -0.07deg roll= -0.48deg x= -0.005 y=  0.003 u_rw=     0.0 u_bx=  -4.48 u_by= -14.58
+Step 37000: pitch=  0.35deg roll=  0.46deg x= -0.015 y= -0.005 u_rw=    -0.2 u_bx=   3.18 u_by=  18.00
+Step 37100: pitch=  0.21deg roll=  0.02deg x= -0.020 y=  0.010 u_rw=     0.2 u_bx=  -7.62 u_by= -28.00
+Step 37200: pitch=  1.78deg roll= -0.67deg x= -0.054 y= -0.021 u_rw=     0.2 u_bx=  -8.11 u_by=  28.00
+Step 37300: pitch=  4.36deg roll=  0.81deg x= -0.131 y=  0.006 u_rw=    -0.2 u_bx= -28.00 u_by= -27.00
+Step 37400: pitch=  9.29deg roll= -1.30deg x= -0.297 y= -0.030 u_rw=    -0.2 u_bx= -18.66 u_by=  19.50
+Step 37500: pitch= 12.49deg roll=  1.54deg x= -0.513 y=  0.001 u_rw=    -0.2 u_bx=  -8.89 u_by=  -7.00
+Step 37600: pitch= 14.53deg roll= -1.38deg x= -0.745 y= -0.018 u_rw=    -0.2 u_bx=  -5.18 u_by= -15.50
+Step 37700: pitch= 16.19deg roll= -0.58deg x= -0.983 y= -0.049 u_rw=    -0.2 u_bx=  -3.69 u_by=  28.00
+Step 37800: pitch= 17.77deg roll=  0.69deg x= -1.224 y= -0.022 u_rw=    -0.2 u_bx=  -3.10 u_by= -28.00
+Step 37900: pitch= 19.39deg roll= -2.65deg x= -1.466 y= -0.078 u_rw=    -0.2 u_bx=  -2.81 u_by=   4.50
+Step 38000: pitch= 21.13deg roll= -0.35deg x= -1.709 y= -0.093 u_rw=    -0.2 u_bx=  -2.84 u_by=   3.00
+Step 38100: pitch= 22.99deg roll= -2.56deg x= -1.951 y= -0.129 u_rw=    -0.2 u_bx=  -2.85 u_by= -23.00
+
+CRASH #26 at step 38199: pitch=25.02deg roll=-3.25deg
+Step 38200: pitch=  0.00deg roll= -0.00deg x= -0.000 y= -0.000 u_rw=    -0.2 u_bx=  -0.70 u_by=  -2.37
+Step 38300: pitch= -0.01deg roll=  0.05deg x= -0.000 y=  0.001 u_rw=     0.2 u_bx=   0.19 u_by=  -0.13
+Step 38400: pitch= -0.00deg roll=  0.08deg x= -0.002 y=  0.006 u_rw=    -0.2 u_bx=  -2.99 u_by= -12.98
+Step 38500: pitch=  0.47deg roll= -0.02deg x= -0.015 y= -0.004 u_rw=    -0.2 u_bx=  -4.42 u_by=  13.83
+Step 38600: pitch=  1.44deg roll= -0.27deg x= -0.044 y=  0.002 u_rw=    -0.2 u_bx= -13.99 u_by= -23.67
+Step 38700: pitch=  4.83deg roll= -0.34deg x= -0.131 y= -0.021 u_rw=    -0.2 u_bx= -28.00 u_by=  25.50
+Step 38800: pitch=  9.70deg roll=  0.62deg x= -0.307 y=  0.007 u_rw=    -0.2 u_bx= -16.73 u_by= -27.00
+Step 38900: pitch= 12.66deg roll= -1.53deg x= -0.526 y= -0.033 u_rw=    -0.2 u_bx=  -8.13 u_by=  19.50
+Step 39000: pitch= 14.59deg roll=  0.77deg x= -0.760 y= -0.013 u_rw=    -0.2 u_bx=  -4.85 u_by= -14.50
+Step 39100: pitch= 16.21deg roll= -2.24deg x= -0.999 y= -0.054 u_rw=    -0.2 u_bx=  -3.55 u_by=  -0.50
+Step 39200: pitch= 17.77deg roll= -0.10deg x= -1.240 y= -0.066 u_rw=    -0.2 u_bx=  -3.09 u_by=   8.00
+Step 39300: pitch= 19.39deg roll= -1.80deg x= -1.482 y= -0.084 u_rw=    -0.2 u_bx=  -2.94 u_by= -25.50
+Step 39400: pitch= 21.14deg roll= -2.28deg x= -1.725 y= -0.143 u_rw=    -0.2 u_bx=  -2.69 u_by=  25.50
+Step 39500: pitch= 23.00deg roll= -2.02deg x= -1.967 y= -0.163 u_rw=    -0.2 u_bx=  -2.86 u_by= -28.00
+
+CRASH #27 at step 39598: pitch=25.00deg roll=-3.83deg
+Step 39600: pitch=  0.00deg roll= -0.00deg x= -0.000 y= -0.000 u_rw=    -0.2 u_bx=  -0.67 u_by=  -2.37
+Step 39700: pitch=  0.01deg roll= -0.14deg x= -0.000 y= -0.003 u_rw=     0.2 u_bx=   0.42 u_by=  10.12
+Step 39800: pitch= -0.01deg roll=  0.42deg x=  0.001 y=  0.012 u_rw=    -0.2 u_bx=  -3.16 u_by= -20.73
+Step 39900: pitch=  0.59deg roll= -0.81deg x= -0.011 y= -0.015 u_rw=    -0.2 u_bx=  -3.52 u_by=  26.77
+Step 40000: pitch=  1.07deg roll=  1.32deg x= -0.033 y=  0.020 u_rw=    -0.2 u_bx=  -7.32 u_by= -18.12
+Step 40100: pitch=  3.99deg roll= -1.44deg x= -0.100 y= -0.009 u_rw=     0.2 u_bx= -28.00 u_by=   4.50
+Step 40200: pitch=  9.09deg roll=  1.01deg x= -0.263 y=  0.003 u_rw=    -0.2 u_bx= -19.40 u_by=   3.00
+Step 40300: pitch= 12.38deg roll= -1.04deg x= -0.478 y= -0.005 u_rw=    -0.2 u_bx=  -9.21 u_by= -13.00
+Step 40400: pitch= 14.45deg roll=  0.05deg x= -0.709 y= -0.021 u_rw=    -0.2 u_bx=  -5.27 u_by=  20.50
+Step 40500: pitch= 16.11deg roll= -0.19deg x= -0.948 y= -0.008 u_rw=    -0.2 u_bx=  -3.74 u_by= -25.50
+Step 40600: pitch= 17.69deg roll= -2.54deg x= -1.189 y= -0.069 u_rw=    -0.2 u_bx=  -3.03 u_by=  19.50
+Step 40700: pitch= 19.31deg roll=  0.27deg x= -1.431 y= -0.063 u_rw=    -0.2 u_bx=  -2.90 u_by=  -7.00
+Step 40800: pitch= 21.04deg roll= -2.69deg x= -1.673 y= -0.104 u_rw=    -0.2 u_bx=  -2.84 u_by= -13.00
+Step 40900: pitch= 22.92deg roll= -1.68deg x= -1.916 y= -0.150 u_rw=    -0.2 u_bx=  -2.74 u_by=  20.50
+Step 41000: pitch= 24.92deg roll= -2.01deg x= -2.158 y= -0.167 u_rw=    -0.2 u_bx=  -2.86 u_by= -28.00
+
+CRASH #28 at step 41004: pitch=25.01deg roll=-2.17deg
+Step 41100: pitch=  0.01deg roll= -0.22deg x=  0.000 y= -0.004 u_rw=     0.2 u_bx=   0.21 u_by=   2.73
+Step 41200: pitch=  0.01deg roll=  0.48deg x=  0.001 y=  0.007 u_rw=    -0.2 u_bx=  -1.78 u_by= -20.18
+Step 41300: pitch=  0.54deg roll= -0.90deg x= -0.007 y= -0.019 u_rw=     0.2 u_bx=  -2.09 u_by=  22.32
+Step 41400: pitch=  0.89deg roll=  1.81deg x= -0.021 y=  0.020 u_rw=    -0.2 u_bx=  -6.95 u_by=  -9.15
+Step 41500: pitch=  3.73deg roll= -1.17deg x= -0.079 y=  0.005 u_rw=     0.2 u_bx= -28.00 u_by= -10.50
+Step 41600: pitch=  8.89deg roll=  0.20deg x= -0.237 y= -0.010 u_rw=    -0.2 u_bx= -20.67 u_by=  18.00
+Step 41700: pitch= 12.33deg roll= -0.34deg x= -0.449 y= -0.002 u_rw=    -0.2 u_bx=  -9.69 u_by= -25.50
+Step 41800: pitch= 14.47deg roll= -0.74deg x= -0.680 y= -0.035 u_rw=    -0.2 u_bx=  -5.41 u_by=  28.00
+Step 41900: pitch= 16.16deg roll=  0.22deg x= -0.918 y= -0.017 u_rw=    -0.2 u_bx=  -3.78 u_by= -28.00
+Step 42000: pitch= 17.76deg roll= -2.91deg x= -1.159 y= -0.081 u_rw=    -0.2 u_bx=  -3.09 u_by=   7.00
+Step 42100: pitch= 19.40deg roll= -0.17deg x= -1.401 y= -0.094 u_rw=    -0.2 u_bx=  -2.93 u_by=   8.00
+Step 42200: pitch= 21.13deg roll= -1.89deg x= -1.643 y= -0.114 u_rw=    -0.2 u_bx=  -2.88 u_by= -25.50
+Step 42300: pitch= 23.02deg roll= -3.44deg x= -1.886 y= -0.194 u_rw=    -0.2 u_bx=  -2.57 u_by=  27.00
+
+CRASH #29 at step 42399: pitch=25.01deg roll=-0.95deg
+Step 42400: pitch= -0.00deg roll=  0.00deg x=  0.000 y=  0.000 u_rw=     0.2 u_bx=   0.68 u_by=   2.37
+Step 42500: pitch=  0.19deg roll=  0.14deg x= -0.001 y=  0.004 u_rw=    -0.2 u_bx=  -1.69 u_by= -10.88
+Step 42600: pitch=  0.12deg roll= -0.10deg x= -0.005 y= -0.000 u_rw=     0.2 u_bx=   0.31 u_by=   8.76
+Step 42700: pitch=  0.13deg roll= -0.14deg x= -0.010 y=  0.003 u_rw=     0.2 u_bx=  -0.94 u_by=  -1.87
+Step 42800: pitch=  0.20deg roll=  0.64deg x= -0.017 y=  0.016 u_rw=    -0.2 u_bx=  -1.31 u_by=  -5.36
+Step 42900: pitch=  0.89deg roll= -1.43deg x= -0.036 y= -0.006 u_rw=     0.2 u_bx=  -8.49 u_by=   3.65
+Step 43000: pitch=  2.29deg roll=  1.00deg x= -0.082 y=  0.008 u_rw=    -0.2 u_bx= -10.12 u_by=   5.50
+Step 43100: pitch=  5.80deg roll= -0.87deg x= -0.183 y=  0.008 u_rw=    -0.2 u_bx= -28.00 u_by= -15.50
+Step 43200: pitch= 10.41deg roll= -0.05deg x= -0.370 y= -0.006 u_rw=    -0.2 u_bx= -14.64 u_by=  20.50
+Step 43300: pitch= 13.12deg roll=  0.05deg x= -0.593 y=  0.014 u_rw=    -0.2 u_bx=  -7.37 u_by= -28.00
+Step 43400: pitch= 14.98deg roll= -2.01deg x= -0.828 y= -0.034 u_rw=    -0.2 u_bx=  -4.48 u_by=  22.00
+Step 43500: pitch= 16.58deg roll=  0.36deg x= -1.067 y= -0.018 u_rw=    -0.2 u_bx=  -3.43 u_by= -14.50
+Step 43600: pitch= 18.16deg roll= -2.58deg x= -1.309 y= -0.061 u_rw=    -0.2 u_bx=  -2.99 u_by=  -3.00
+Step 43700: pitch= 19.82deg roll= -0.55deg x= -1.551 y= -0.078 u_rw=    -0.2 u_bx=  -2.88 u_by=  10.50
+Step 43800: pitch= 21.58deg roll= -2.01deg x= -1.793 y= -0.093 u_rw=    -0.2 u_bx=  -2.86 u_by= -23.00
+Step 43900: pitch= 23.51deg roll= -3.33deg x= -2.036 y= -0.165 u_rw=    -0.2 u_bx=  -2.56 u_by=  24.50
+
+CRASH #30 at step 43974: pitch=25.01deg roll=-1.40deg
+Step 44000: pitch=  0.01deg roll= -0.03deg x= -0.000 y= -0.000 u_rw=    -0.2 u_bx=  -1.17 u_by=  -6.57
+Step 44100: pitch=  0.01deg roll= -0.01deg x=  0.000 y= -0.007 u_rw=     0.2 u_bx=   2.97 u_by=  19.92
+Step 44200: pitch= -0.32deg roll=  0.09deg x=  0.008 y=  0.009 u_rw=     0.2 u_bx=  -1.18 u_by= -28.00
+Step 44300: pitch= -0.14deg roll= -1.17deg x=  0.013 y= -0.028 u_rw=     0.2 u_bx=   5.51 u_by=  27.46
+Step 44400: pitch= -2.03deg roll=  1.73deg x=  0.049 y=  0.012 u_rw=    -0.2 u_bx=  18.12 u_by=  -9.50
+Step 44500: pitch= -5.78deg roll= -1.21deg x=  0.154 y= -0.003 u_rw=     0.2 u_bx=  28.00 u_by=  -8.00
+Step 44600: pitch=-10.39deg roll=  0.41deg x=  0.341 y= -0.010 u_rw=     0.2 u_bx=  14.70 u_by=  20.50
+Step 44700: pitch=-13.09deg roll=  0.23deg x=  0.564 y=  0.012 u_rw=     0.2 u_bx=   7.38 u_by= -23.87
+Step 44800: pitch=-14.95deg roll= -0.96deg x=  0.798 y= -0.019 u_rw=     0.2 u_bx=   4.50 u_by=  28.00
+Step 44900: pitch=-16.55deg roll=  2.15deg x=  1.038 y=  0.029 u_rw=     0.2 u_bx=   3.40 u_by=  -7.00
+Step 45000: pitch=-18.13deg roll=  0.02deg x=  1.280 y=  0.036 u_rw=     0.2 u_bx=   3.02 u_by=   4.50
+Step 45100: pitch=-19.77deg roll=  2.71deg x=  1.522 y=  0.082 u_rw=     0.2 u_bx=   2.88 u_by=  10.50
+Step 45200: pitch=-21.56deg roll=  1.39deg x=  1.764 y=  0.126 u_rw=     0.2 u_bx=   2.77 u_by= -23.00
+Step 45300: pitch=-23.44deg roll=  1.37deg x=  2.007 y=  0.133 u_rw=     0.2 u_bx=   2.82 u_by=  28.00
+
+CRASH #31 at step 45377: pitch=-25.02deg roll=3.99deg
+Step 45400: pitch=  0.00deg roll= -0.02deg x= -0.000 y= -0.000 u_rw=     0.2 u_bx=   0.95 u_by=   0.33
+Step 45500: pitch= -0.03deg roll=  0.07deg x=  0.000 y=  0.003 u_rw=    -0.2 u_bx=  -1.96 u_by=  -2.43
+Step 45600: pitch=  0.18deg roll= -0.17deg x= -0.003 y= -0.003 u_rw=    -0.2 u_bx=  -1.67 u_by=   0.77
+Step 45700: pitch=  0.44deg roll= -0.08deg x= -0.012 y= -0.005 u_rw=     0.2 u_bx=  -1.84 u_by=   2.53
+Step 45800: pitch=  1.19deg roll=  0.01deg x= -0.032 y= -0.005 u_rw=    -0.2 u_bx=  -8.53 u_by=  -0.65
+Step 45900: pitch=  3.63deg roll=  0.09deg x= -0.093 y= -0.000 u_rw=    -0.2 u_bx= -27.74 u_by= -12.20
+Step 46000: pitch=  8.66deg roll=  0.42deg x= -0.245 y= -0.002 u_rw=    -0.2 u_bx= -21.68 u_by=  10.30
+Step 46100: pitch= 12.20deg roll= -0.99deg x= -0.456 y= -0.008 u_rw=    -0.2 u_bx= -10.03 u_by= -15.50
+Step 46200: pitch= 14.38deg roll= -0.16deg x= -0.686 y= -0.028 u_rw=    -0.2 u_bx=  -5.58 u_by=  23.00
+Step 46300: pitch= 16.08deg roll= -0.09deg x= -0.924 y= -0.013 u_rw=    -0.2 u_bx=  -3.85 u_by= -28.00
+Step 46400: pitch= 17.68deg roll= -1.90deg x= -1.165 y= -0.063 u_rw=    -0.2 u_bx=  -3.09 u_by=  24.50
+Step 46500: pitch= 19.31deg roll= -0.15deg x= -1.407 y= -0.057 u_rw=    -0.2 u_bx=  -2.91 u_by= -22.00
+Step 46600: pitch= 21.05deg roll= -3.12deg x= -1.649 y= -0.120 u_rw=    -0.2 u_bx=  -2.72 u_by=   7.00
+Step 46700: pitch= 22.92deg roll= -0.57deg x= -1.892 y= -0.135 u_rw=    -0.2 u_bx=  -2.80 u_by=   3.00
+Step 46800: pitch= 24.92deg roll= -2.81deg x= -2.134 y= -0.170 u_rw=    -0.2 u_bx=  -2.87 u_by= -28.00
+
+CRASH #32 at step 46804: pitch=25.01deg roll=-2.98deg
+Step 46900: pitch=  0.03deg roll= -0.07deg x= -0.000 y= -0.001 u_rw=     0.2 u_bx=  -0.56 u_by=   0.49
+Step 47000: pitch=  0.17deg roll= -0.07deg x= -0.003 y= -0.001 u_rw=     0.2 u_bx=  -0.28 u_by=   2.72
+Step 47100: pitch=  0.27deg roll=  0.21deg x= -0.007 y=  0.006 u_rw=    -0.2 u_bx=  -2.50 u_by=  -4.96
+Step 47200: pitch=  0.36deg roll= -0.34deg x= -0.020 y=  0.002 u_rw=     0.2 u_bx=  -4.98 u_by=   2.89
+Step 47300: pitch=  1.22deg roll= -0.08deg x= -0.054 y=  0.002 u_rw=    -0.2 u_bx=  -8.73 u_by=  -0.01
+Step 47400: pitch=  3.65deg roll=  0.20deg x= -0.129 y=  0.004 u_rw=    -0.2 u_bx= -26.05 u_by=   2.49
+Step 47500: pitch=  8.52deg roll= -0.47deg x= -0.292 y=  0.001 u_rw=    -0.2 u_bx= -19.30 u_by=  -0.01
+Step 47600: pitch= 11.72deg roll=  0.29deg x= -0.506 y=  0.004 u_rw=    -0.2 u_bx=  -9.11 u_by=  -7.51
+Step 47700: pitch= 13.72deg roll= -1.52deg x= -0.738 y= -0.022 u_rw=    -0.2 u_bx=  -5.21 u_by=   4.99
+Step 47800: pitch= 15.31deg roll=  0.63deg x= -0.977 y= -0.012 u_rw=    -0.2 u_bx=  -3.71 u_by=  -2.51
+Step 47900: pitch= 16.82deg roll= -1.86deg x= -1.217 y= -0.036 u_rw=    -0.2 u_bx=  -3.14 u_by= -13.00
+Step 48000: pitch= 18.38deg roll= -0.77deg x= -1.460 y= -0.063 u_rw=    -0.2 u_bx=  -2.90 u_by=  20.50
+Step 48100: pitch= 20.03deg roll= -1.08deg x= -1.702 y= -0.062 u_rw=    -0.2 u_bx=  -2.86 u_by= -28.00
+Step 48200: pitch= 21.82deg roll= -3.67deg x= -1.945 y= -0.139 u_rw=    -0.2 u_bx=  -2.61 u_by=  17.00
+Step 48300: pitch= 23.74deg roll= -1.00deg x= -2.187 y= -0.152 u_rw=    -0.2 u_bx=  -2.78 u_by=  -4.50
+
+CRASH #33 at step 48362: pitch=25.01deg roll=-2.32deg
+Step 48400: pitch=  0.00deg roll=  0.01deg x= -0.000 y=  0.000 u_rw=    -0.2 u_bx=  -0.01 u_by=  -4.78
+Step 48500: pitch=  0.01deg roll= -0.92deg x= -0.001 y= -0.020 u_rw=     0.2 u_bx=   2.81 u_by=  16.69
+Step 48600: pitch= -0.83deg roll=  0.53deg x=  0.013 y= -0.003 u_rw=     0.2 u_bx=   8.77 u_by= -15.81
+Step 48700: pitch= -2.79deg roll= -0.79deg x=  0.061 y= -0.022 u_rw=     0.2 u_bx=  20.35 u_by=  16.69
+Step 48800: pitch= -7.49deg roll=  1.77deg x=  0.192 y=  0.017 u_rw=     0.2 u_bx=  27.08 u_by=  -7.00
+Step 48900: pitch=-11.55deg roll= -0.92deg x=  0.394 y=  0.008 u_rw=     0.2 u_bx=  11.73 u_by=  -5.50
+Step 49000: pitch=-13.92deg roll=  0.98deg x=  0.622 y=  0.015 u_rw=     0.2 u_bx=   6.27 u_by=  20.50
+Step 49100: pitch=-15.69deg roll=  1.35deg x=  0.858 y=  0.060 u_rw=     0.2 u_bx=   4.06 u_by= -28.00
+Step 49200: pitch=-17.28deg roll= -0.86deg x=  1.099 y=  0.033 u_rw=     0.2 u_bx=   3.24 u_by=  19.50
+Step 49300: pitch=-18.89deg roll=  2.66deg x=  1.340 y=  0.082 u_rw=     0.2 u_bx=   2.96 u_by=   8.00
+Step 49400: pitch=-20.61deg roll=  1.08deg x=  1.583 y=  0.119 u_rw=     0.2 u_bx=   2.83 u_by= -18.00
+Step 49500: pitch=-22.42deg roll=  1.67deg x=  1.825 y=  0.133 u_rw=     0.2 u_bx=   2.85 u_by=  28.00
+Step 49600: pitch=-24.42deg roll=  3.04deg x=  2.068 y=  0.204 u_rw=     0.2 u_bx=   2.56 u_by= -28.00
+
+CRASH #34 at step 49628: pitch=-25.00deg roll=2.12deg
+Step 49700: pitch= -0.01deg roll=  0.19deg x=  0.000 y=  0.003 u_rw=    -0.2 u_bx=  -1.06 u_by= -10.35
+Step 49800: pitch=  0.07deg roll= -0.23deg x= -0.001 y= -0.005 u_rw=    -0.2 u_bx=  -0.54 u_by=   4.74
+Step 49900: pitch= -0.13deg roll=  0.03deg x=  0.001 y=  0.001 u_rw=     0.2 u_bx=   1.93 u_by= -11.05
+Step 50000: pitch= -0.10deg roll=  0.36deg x=  0.006 y= -0.001 u_rw=    -0.2 u_bx=   3.81 u_by=   9.98
+Step 50100: pitch= -0.49deg roll= -0.65deg x=  0.023 y= -0.002 u_rw=     0.2 u_bx=   0.68 u_by= -15.50
+Step 50200: pitch= -1.09deg roll= -0.02deg x=  0.048 y= -0.018 u_rw=     0.2 u_bx=  14.57 u_by=  28.00
+Step 50300: pitch= -4.57deg roll=  1.24deg x=  0.133 y=  0.021 u_rw=    -0.2 u_bx=  27.34 u_by= -28.00
+Step 50400: pitch= -9.46deg roll= -1.38deg x=  0.309 y= -0.014 u_rw=     0.2 u_bx=  16.90 u_by=  14.50
+Step 50500: pitch=-12.41deg roll=  1.75deg x=  0.527 y=  0.015 u_rw=     0.2 u_bx=   8.26 u_by=   8.00
+Step 50600: pitch=-14.35deg roll=  0.11deg x=  0.760 y=  0.032 u_rw=     0.2 u_bx=   4.91 u_by= -23.00
+Step 50700: pitch=-15.95deg roll=  0.04deg x=  0.999 y=  0.014 u_rw=     0.2 u_bx=   3.59 u_by=  28.00
+Step 50800: pitch=-17.50deg roll=  2.80deg x=  1.241 y=  0.077 u_rw=     0.2 u_bx=   2.98 u_by= -14.50
+Step 50900: pitch=-19.10deg roll=  0.12deg x=  1.483 y=  0.079 u_rw=     0.2 u_bx=   2.88 u_by=   4.50
+Step 51000: pitch=-20.81deg roll=  2.84deg x=  1.725 y=  0.121 u_rw=     0.2 u_bx=   2.83 u_by=  13.00
+Step 51100: pitch=-22.67deg roll=  2.04deg x=  1.968 y=  0.171 u_rw=     0.2 u_bx=   2.73 u_by= -14.50
+Step 51200: pitch=-24.65deg roll=  3.02deg x=  2.210 y=  0.207 u_rw=     0.2 u_bx=   2.88 u_by=  28.00
+
+CRASH #35 at step 51217: pitch=-25.00deg roll=3.68deg
+Step 51300: pitch=  0.00deg roll=  0.06deg x=  0.000 y=  0.000 u_rw=    -0.2 u_bx=  -0.38 u_by=   1.35
+Step 51400: pitch= -0.21deg roll= -0.22deg x=  0.004 y= -0.003 u_rw=     0.2 u_bx=   2.13 u_by=   8.21
+Step 51500: pitch= -0.39deg roll=  0.35deg x=  0.015 y=  0.007 u_rw=     0.2 u_bx=   4.40 u_by=  -9.48
+Step 51600: pitch= -1.26deg roll= -0.83deg x=  0.045 y= -0.013 u_rw=     0.2 u_bx=  11.20 u_by=  13.02
+Step 51700: pitch= -4.55deg roll=  0.94deg x=  0.128 y=  0.008 u_rw=     0.2 u_bx=  28.00 u_by= -14.48
+Step 51800: pitch= -9.47deg roll= -1.40deg x=  0.304 y= -0.020 u_rw=     0.2 u_bx=  16.87 u_by=   8.02
+Step 51900: pitch=-12.42deg roll=  1.31deg x=  0.523 y= -0.001 u_rw=     0.2 u_bx=   8.24 u_by=   3.00
+Step 52000: pitch=-14.36deg roll= -0.49deg x=  0.756 y=  0.001 u_rw=     0.2 u_bx=   4.89 u_by=  -3.00
+Step 52100: pitch=-15.95deg roll=  1.67deg x=  0.995 y=  0.021 u_rw=     0.2 u_bx=   3.63 u_by=  20.50
+Step 52200: pitch=-17.50deg roll=  1.49deg x=  1.236 y=  0.069 u_rw=     0.2 u_bx=   3.03 u_by= -25.50
+Step 52300: pitch=-19.10deg roll=  0.55deg x=  1.478 y=  0.064 u_rw=     0.2 u_bx=   2.90 u_by=  28.00
+Step 52400: pitch=-20.82deg roll=  3.23deg x=  1.721 y=  0.133 u_rw=     0.2 u_bx=   2.67 u_by= -14.50
+Step 52500: pitch=-22.66deg roll=  0.69deg x=  1.963 y=  0.143 u_rw=     0.2 u_bx=   2.79 u_by=   7.00
+Step 52600: pitch=-24.65deg roll=  3.64deg x=  2.206 y=  0.198 u_rw=     0.2 u_bx=   2.84 u_by=  20.50
+
+CRASH #36 at step 52617: pitch=-25.01deg roll=4.18deg
+Step 52700: pitch=  0.09deg roll=  0.13deg x= -0.001 y= -0.000 u_rw=     0.2 u_bx=   0.57 u_by=   7.08
+Step 52800: pitch=  0.15deg roll= -0.53deg x= -0.001 y= -0.004 u_rw=     0.2 u_bx=  -1.50 u_by=  -4.63
+Step 52900: pitch=  0.33deg roll=  0.90deg x= -0.006 y=  0.006 u_rw=    -0.2 u_bx=   0.43 u_by=   6.13
+Step 53000: pitch=  1.03deg roll= -0.84deg x= -0.020 y=  0.003 u_rw=    -0.2 u_bx= -14.57 u_by= -15.50
+Step 53100: pitch=  3.81deg roll= -0.06deg x= -0.085 y= -0.014 u_rw=    -0.2 u_bx= -20.06 u_by=  28.00
+Step 53200: pitch=  8.54deg roll=  0.63deg x= -0.231 y=  0.015 u_rw=    -0.2 u_bx= -22.76 u_by= -28.00
+Step 53300: pitch= 12.21deg roll= -2.25deg x= -0.440 y= -0.036 u_rw=    -0.2 u_bx= -10.32 u_by=  12.00
+Step 53400: pitch= 14.44deg roll=  0.69deg x= -0.670 y= -0.028 u_rw=    -0.2 u_bx=  -5.72 u_by=   3.00
+Step 53500: pitch= 16.17deg roll= -1.40deg x= -0.907 y= -0.040 u_rw=    -0.2 u_bx=  -3.94 u_by= -15.50
+Step 53600: pitch= 17.79deg roll= -0.62deg x= -1.148 y= -0.067 u_rw=    -0.2 u_bx=  -3.20 u_by=  18.00
+Step 53700: pitch= 19.43deg roll= -1.21deg x= -1.390 y= -0.071 u_rw=    -0.2 u_bx=  -2.97 u_by= -28.00
+Step 53800: pitch= 21.18deg roll= -2.52deg x= -1.632 y= -0.131 u_rw=    -0.2 u_bx=  -2.68 u_by=  28.00
+Step 53900: pitch= 23.05deg roll= -1.15deg x= -1.875 y= -0.136 u_rw=    -0.2 u_bx=  -2.81 u_by= -27.00
+
+CRASH #37 at step 53996: pitch=25.00deg roll=-3.92deg
+Step 54000: pitch= -0.00deg roll=  0.00deg x=  0.000 y=  0.000 u_rw=     0.2 u_bx=   0.85 u_by=   2.37
+Step 54100: pitch= -0.07deg roll= -0.06deg x=  0.001 y=  0.001 u_rw=    -0.2 u_bx=  -2.09 u_by=  -5.02
+Step 54200: pitch= -0.13deg roll=  0.21deg x=  0.000 y=  0.000 u_rw=    -0.2 u_bx=   1.55 u_by=  11.43
+Step 54300: pitch= -0.03deg roll= -0.43deg x=  0.003 y=  0.002 u_rw=     0.2 u_bx=  -1.74 u_by= -14.20
+Step 54400: pitch=  0.30deg roll=  0.46deg x=  0.003 y= -0.004 u_rw=    -0.2 u_bx=   2.04 u_by=  15.50
+Step 54500: pitch=  0.14deg roll= -0.36deg x=  0.008 y=  0.005 u_rw=     0.2 u_bx=  -6.49 u_by= -23.00
+Step 54600: pitch=  1.02deg roll= -0.45deg x= -0.010 y= -0.022 u_rw=    -0.2 u_bx=  -2.20 u_by=  28.00
+Step 54700: pitch=  1.87deg roll=  1.36deg x= -0.041 y=  0.018 u_rw=    -0.2 u_bx= -15.32 u_by= -24.50
+Step 54800: pitch=  6.09deg roll= -1.46deg x= -0.144 y= -0.014 u_rw=     0.2 u_bx= -28.00 u_by=   9.50
+Step 54900: pitch= 10.73deg roll=  1.25deg x= -0.334 y=  0.005 u_rw=    -0.2 u_bx= -14.34 u_by=   0.50
+Step 55000: pitch= 13.42deg roll= -1.11deg x= -0.557 y= -0.005 u_rw=    -0.2 u_bx=  -7.30 u_by= -18.00
+Step 55100: pitch= 15.30deg roll= -0.61deg x= -0.792 y= -0.035 u_rw=    -0.2 u_bx=  -4.51 u_by=  23.00
+Step 55200: pitch= 16.92deg roll= -0.57deg x= -1.031 y= -0.030 u_rw=    -0.2 u_bx=  -3.45 u_by= -28.00
+Step 55300: pitch= 18.53deg roll= -2.88deg x= -1.273 y= -0.098 u_rw=    -0.2 u_bx=  -2.90 u_by=  19.50
+Step 55400: pitch= 20.21deg roll=  0.06deg x= -1.515 y= -0.096 u_rw=    -0.2 u_bx=  -2.86 u_by=  -4.50
+Step 55500: pitch= 22.00deg roll= -2.68deg x= -1.758 y= -0.134 u_rw=    -0.2 u_bx=  -2.82 u_by= -13.00
+Step 55600: pitch= 23.96deg roll= -1.65deg x= -2.000 y= -0.178 u_rw=    -0.2 u_bx=  -2.71 u_by=  25.50
+
+CRASH #38 at step 55651: pitch=25.00deg roll=-0.42deg
+Step 55700: pitch= -0.01deg roll= -0.00deg x=  0.000 y=  0.000 u_rw=     0.2 u_bx=   0.40 u_by=   2.42
+Step 55800: pitch= -0.14deg roll= -0.15deg x=  0.001 y= -0.003 u_rw=     0.2 u_bx=   1.35 u_by=   6.43
+Step 55900: pitch= -0.59deg roll= -0.04deg x=  0.008 y= -0.000 u_rw=     0.2 u_bx=   5.71 u_by= -10.31
+Step 56000: pitch= -1.96deg roll=  0.60deg x=  0.037 y= -0.000 u_rw=    -0.2 u_bx=  15.63 u_by=  12.19
+Step 56100: pitch= -5.98deg roll= -0.48deg x=  0.136 y=  0.003 u_rw=     0.2 u_bx=  28.00 u_by= -14.62
+Step 56200: pitch=-10.72deg roll=  0.44deg x=  0.322 y= -0.006 u_rw=     0.2 u_bx=  15.02 u_by=  17.88
+Step 56300: pitch=-13.51deg roll=  0.01deg x=  0.544 y=  0.009 u_rw=     0.2 u_bx=   7.51 u_by= -18.00
+Step 56400: pitch=-15.42deg roll=  0.55deg x=  0.778 y=  0.003 u_rw=     0.2 u_bx=   4.62 u_by=  28.00
+Step 56500: pitch=-17.07deg roll=  2.59deg x=  1.018 y=  0.065 u_rw=     0.2 u_bx=   3.36 u_by= -22.00
+Step 56600: pitch=-18.69deg roll= -0.31deg x=  1.259 y=  0.055 u_rw=     0.2 u_bx=   3.03 u_by=   7.00
+Step 56700: pitch=-20.38deg roll=  2.55deg x=  1.502 y=  0.092 u_rw=     0.2 u_bx=   2.86 u_by=   8.00
+Step 56800: pitch=-22.21deg roll=  1.16deg x=  1.744 y=  0.123 u_rw=     0.2 u_bx=   2.80 u_by=  -9.50
+Step 56900: pitch=-24.16deg roll=  2.74deg x=  1.987 y=  0.155 u_rw=     0.2 u_bx=   2.87 u_by=  23.00
+
+CRASH #39 at step 56941: pitch=-25.01deg roll=3.86deg
+Step 57000: pitch=  0.07deg roll=  0.12deg x= -0.000 y=  0.002 u_rw=    -0.2 u_bx=  -2.08 u_by=   0.75
+Step 57100: pitch=  0.56deg roll= -0.26deg x= -0.008 y= -0.001 u_rw=    -0.2 u_bx=  -5.98 u_by=   8.62
+Step 57200: pitch=  1.80deg roll=  0.48deg x= -0.039 y=  0.013 u_rw=    -0.2 u_bx= -14.35 u_by= -18.88
+Step 57300: pitch=  5.64deg roll= -0.94deg x= -0.136 y= -0.012 u_rw=    -0.2 u_bx= -28.00 u_by=  23.62
+Step 57400: pitch= 10.40deg roll=  1.51deg x= -0.321 y=  0.026 u_rw=    -0.2 u_bx= -15.18 u_by= -14.50
+Step 57500: pitch= 13.17deg roll= -1.59deg x= -0.543 y=  0.001 u_rw=    -0.2 u_bx=  -7.56 u_by=  -3.00
+Step 57600: pitch= 15.07deg roll=  0.32deg x= -0.777 y= -0.004 u_rw=    -0.2 u_bx=  -4.64 u_by=  10.50
+Step 57700: pitch= 16.70deg roll= -1.06deg x= -1.016 y= -0.008 u_rw=    -0.2 u_bx=  -3.51 u_by= -15.50
+Step 57800: pitch= 18.30deg roll= -0.77deg x= -1.258 y= -0.036 u_rw=    -0.2 u_bx=  -3.02 u_by=  20.50
+Step 57900: pitch= 19.96deg roll= -1.09deg x= -1.500 y= -0.039 u_rw=    -0.2 u_bx=  -2.91 u_by= -28.00
+Step 58000: pitch= 21.76deg roll= -2.72deg x= -1.743 y= -0.103 u_rw=    -0.2 u_bx=  -2.64 u_by=  27.00
+Step 58100: pitch= 23.67deg roll= -0.68deg x= -1.985 y= -0.102 u_rw=    -0.2 u_bx=  -2.79 u_by= -19.50
+
+CRASH #40 at step 58166: pitch=25.02deg roll=-3.04deg
+Step 58200: pitch= -0.01deg roll=  0.10deg x=  0.000 y=  0.001 u_rw=    -0.2 u_bx=  -0.49 u_by=   1.15
+Step 58300: pitch= -0.18deg roll= -0.30deg x=  0.003 y= -0.000 u_rw=     0.2 u_bx=   0.80 u_by=  -5.55
+Step 58400: pitch= -0.65deg roll=  0.24deg x=  0.014 y= -0.002 u_rw=     0.2 u_bx=   8.96 u_by=   3.96
+Step 58500: pitch= -2.52deg roll= -0.16deg x=  0.057 y= -0.003 u_rw=     0.2 u_bx=  18.41 u_by=   3.56
+Step 58600: pitch= -6.88deg roll=  0.11deg x=  0.174 y= -0.003 u_rw=     0.2 u_bx=  28.00 u_by=   6.06
+Step 58700: pitch=-11.19deg roll= -0.19deg x=  0.372 y= -0.001 u_rw=     0.2 u_bx=  12.83 u_by=  -1.44
+Step 58800: pitch=-13.70deg roll=  1.00deg x=  0.597 y=  0.012 u_rw=     0.2 u_bx=   6.67 u_by=   6.06
+Step 58900: pitch=-15.51deg roll=  0.05deg x=  0.833 y=  0.023 u_rw=     0.2 u_bx=   4.28 u_by=  -6.44
+Step 59000: pitch=-17.11deg roll=  1.73deg x=  1.073 y=  0.045 u_rw=     0.2 u_bx=   3.36 u_by=  11.06
+Step 59100: pitch=-18.73deg roll=  0.56deg x=  1.315 y=  0.069 u_rw=     0.2 u_bx=   2.99 u_by= -10.50
+Step 59200: pitch=-20.41deg roll=  2.02deg x=  1.557 y=  0.091 u_rw=     0.2 u_bx=   2.92 u_by=  25.50
+Step 59300: pitch=-22.25deg roll=  2.49deg x=  1.800 y=  0.154 u_rw=     0.2 u_bx=   2.65 u_by= -25.50
+Step 59400: pitch=-24.20deg roll=  1.33deg x=  2.042 y=  0.160 u_rw=     0.2 u_bx=   2.82 u_by=  28.00
+
+CRASH #41 at step 59439: pitch=-25.00deg roll=2.83deg
+Step 59500: pitch= -0.04deg roll=  0.29deg x=  0.001 y=  0.004 u_rw=    -0.2 u_bx=   0.23 u_by=   3.71
+Step 59600: pitch= -0.21deg roll= -0.60deg x=  0.005 y= -0.002 u_rw=     0.2 u_bx=   1.42 u_by=  -7.21
+Step 59700: pitch= -1.00deg roll=  0.61deg x=  0.021 y=  0.001 u_rw=    -0.2 u_bx=  11.43 u_by=   8.56
+Step 59800: pitch= -3.64deg roll= -0.97deg x=  0.084 y= -0.006 u_rw=     0.2 u_bx=  21.47 u_by= -13.00
+Step 59900: pitch= -8.52deg roll=  0.15deg x=  0.233 y= -0.020 u_rw=     0.2 u_bx=  22.23 u_by=  23.00
+Step 60000: pitch=-12.12deg roll=  0.25deg x=  0.443 y=  0.002 u_rw=     0.2 u_bx=  10.19 u_by= -24.50
+Step 60100: pitch=-14.31deg roll= -0.56deg x=  0.673 y= -0.023 u_rw=     0.2 u_bx=   5.62 u_by=  28.00
+Step 60200: pitch=-16.02deg roll=  2.09deg x=  0.911 y=  0.027 u_rw=     0.2 u_bx=   3.80 u_by= -14.50
+Step 60300: pitch=-17.61deg roll= -0.29deg x=  1.152 y=  0.022 u_rw=     0.2 u_bx=   3.16 u_by=   9.50

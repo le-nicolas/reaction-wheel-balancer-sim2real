@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+env/
+
+final/results/
+final/__pycache__/
+esp32_rw_base_platformio/.pio/
+esp32_rw_base_platformio/.vscode/
+esp32_rw_base_platformio/.sconsign*
+
+.DS_Store
+Thumbs.db
+

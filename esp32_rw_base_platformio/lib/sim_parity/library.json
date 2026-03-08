@@ -1,0 +1,8 @@
+{
+  "name": "sim_parity",
+  "version": "0.1.0",
+  "description": "Reused controller, estimator, guard, and fault-management code from the MuJoCo firmware scaffold.",
+  "build": {
+    "srcDir": "src"
+  }
+}

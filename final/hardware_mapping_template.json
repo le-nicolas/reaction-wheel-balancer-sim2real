@@ -1,0 +1,40 @@
+{
+  "schema_version": "hil_mapping_v1",
+  "backend": "runtime",
+  "runtime_args": "--mode robust --hardware-safe --control-hz 250 --controller-family current",
+  "controls": {
+    "rw_cmd_scale": 0.03,
+    "drive_cmd_scale": 0.1
+  },
+  "signs": {
+    "reaction_sign": 1.0,
+    "drive_sign": 1.0,
+    "pitch_rate_sign": 1.0,
+    "roll_rate_sign": 1.0,
+    "reaction_speed_sign": 1.0,
+    "accel_x_sign": 1.0,
+    "accel_y_sign": 1.0,
+    "accel_z_sign": 1.0
+  },
+  "safety": {
+    "pitch_estop_deg": 35.0,
+    "roll_estop_deg": 35.0,
+    "comm_estop_s": 0.25,
+    "max_reaction_norm": 1.0,
+    "max_drive_norm": 1.0
+  },
+  "live_tuning": {
+    "rw_cmd_scale": 0.03,
+    "drive_cmd_scale": 0.1,
+    "base_pitch_kp": 78.0,
+    "base_pitch_kd": 16.0,
+    "base_roll_kp": 30.0,
+    "base_roll_kd": 7.0,
+    "wheel_momentum_k": 0.7,
+    "wheel_momentum_thresh_frac": 0.18,
+    "u_bleed": 0.9,
+    "estimator_q_scale": 1.0,
+    "estimator_r_scale": 1.0
+  }
+}
+

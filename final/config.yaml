@@ -1,0 +1,122 @@
+# Runtime tuning overrides loaded by final/runtime_config.py.
+# Layer order: global -> mode.<smooth|robust> -> preset.<...> -> stability_profile.<...>
+# Use CLI `--enable-online-id` to activate adaptive scheduling; this file tunes its numeric limits.
+#
+# Optional advanced tuning keys (commented by default):
+# global:
+#   qx_diag: [300.0, 90.0, 70.0, 50.0, 1.0, 220.0, 220.0, 520.0, 520.0]
+#   qu_diag: [0.001, 0.08, 0.08]
+#   r_du_diag: [3.0, 0.8, 0.8]
+#   max_u: [100.0, 14.0, 14.0]
+#   max_du: [10.0, 0.45, 0.45]
+#   ki_base: 1.6
+#   u_bleed: 0.94
+#   online_id_forgetting: 0.995
+#   online_id_init_cov: 500.0
+#   online_id_recompute_every: 25
+#   online_id_min_updates: 60
+
+global:
+  wheel_momentum_thresh_frac: 0.35
+  wheel_momentum_k: 0.40
+  wheel_momentum_upright_k: 0.22
+  wheel_spin_budget_frac: 0.18
+  wheel_spin_hard_frac: 0.42
+  wheel_spin_budget_abs_rad_s: 160.0
+  wheel_spin_hard_abs_rad_s: 250.0
+  high_spin_exit_frac: 0.82
+  high_spin_counter_min_frac: 0.12
+  high_spin_base_authority_min: 0.45
+  wheel_to_base_bias_gain: 0.35
+  recovery_wheel_despin_scale: 0.45
+  hold_wheel_despin_scale: 1.0
+  online_id_forgetting: 0.995
+  online_id_init_cov: 500.0
+  online_id_min_excitation: 0.015
+  online_id_recompute_every: 25
+  online_id_min_updates: 60
+  online_id_gravity_scale_min: 0.55
+  online_id_gravity_scale_max: 1.80
+  online_id_inertia_inv_scale_min: 0.45
+  online_id_inertia_inv_scale_max: 2.20
+  online_id_scale_rate_per_s: 0.60
+  online_id_gain_blend_alpha: 0.18
+  online_id_gain_max_delta: 0.35
+  online_id_innovation_clip: 4.0
+
+mode:
+  smooth:
+    base_force_soft_limit: 10.0
+    base_damping_gain: 5.0
+    base_centering_gain: 1.0
+    base_tilt_deadband_deg: 0.4
+    base_tilt_full_authority_deg: 1.8
+    base_command_gain: 0.70
+    base_centering_pos_clip_m: 0.25
+    base_speed_soft_limit_frac: 0.55
+    base_hold_radius_m: 0.15
+    base_ref_follow_rate_hz: 5.5
+    base_ref_recenter_rate_hz: 0.90
+    base_authority_rate_per_s: 1.8
+    base_command_lpf_hz: 7.0
+    upright_base_du_scale: 0.30
+    base_pitch_kp: 84.0
+    base_pitch_kd: 18.0
+    base_roll_kp: 34.0
+    base_roll_kd: 8.0
+    wheel_only_pitch_kp: 180.0
+    wheel_only_pitch_kd: 34.0
+    wheel_only_pitch_ki: 20.0
+    wheel_only_wheel_rate_kd: 0.22
+    wheel_only_max_u: 40.0
+    wheel_only_max_du: 8.0
+  robust:
+    base_force_soft_limit: 12.0
+    base_damping_gain: 6.0
+    base_centering_gain: 1.5
+    base_tilt_deadband_deg: 0.5
+    base_tilt_full_authority_deg: 2.0
+    base_command_gain: 0.60
+    base_centering_pos_clip_m: 0.20
+    base_speed_soft_limit_frac: 0.70
+    base_hold_radius_m: 0.15
+    base_ref_follow_rate_hz: 9.0
+    base_ref_recenter_rate_hz: 0.40
+    base_authority_rate_per_s: 2.4
+    base_command_lpf_hz: 9.0
+    upright_base_du_scale: 0.40
+    base_pitch_kp: 78.0
+    base_pitch_kd: 16.0
+    base_roll_kp: 30.0
+    base_roll_kd: 7.0
+    wheel_only_pitch_kp: 220.0
+    wheel_only_pitch_kd: 40.0
+    wheel_only_pitch_ki: 24.0
+    wheel_only_wheel_rate_kd: 0.25
+    wheel_only_max_u: 50.0
+    wheel_only_max_du: 8.0
+
+preset:
+  stable-demo:
+    base_tilt_deadband_deg: 0.25
+    base_tilt_full_authority_deg: 1.2
+    base_authority_rate_per_s: 1.8
+    base_command_lpf_hz: 8.0
+    upright_base_du_scale: 0.45
+    wheel_momentum_thresh_frac: 0.24
+    wheel_momentum_k: 0.55
+    wheel_momentum_upright_k: 0.30
+
+stability_profile:
+  low-spin-robust:
+    wheel_momentum_thresh_frac: 0.18
+    wheel_momentum_k: 0.90
+    wheel_momentum_upright_k: 0.55
+    wheel_spin_budget_frac: 0.12
+    wheel_spin_hard_frac: 0.25
+    wheel_spin_budget_abs_rad_s: 160.0
+    wheel_spin_hard_abs_rad_s: 250.0
+    high_spin_exit_frac: 0.78
+    high_spin_counter_min_frac: 0.20
+    high_spin_base_authority_min: 0.60
+    wheel_to_base_bias_gain: 0.70

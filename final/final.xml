@@ -1,0 +1,493 @@
+<mujoco model="wheel_on_stick">
+    <!-- Big picture: world-rooted base (via weld) + ball-drive gimbal + reaction wheel, on uneven terrain. -->
+    <!-- Reader Mode:
+         - Dynamics (mass/collision critical): base cylinder, stick capsule, wheel rotor + hub, terrain, free-joint + gimbal/hinge joints.
+         - Visual-only (mass=0 and contype/conaffinity=0): chassis shell/plate, bumpers, dome, torso/head/eyes, rim/tire/spokes.
+         - Controls: 3 motors -> wheel_spin torque, base_x_force, base_y_force.
+         - Contact story: robot interacts with uneven ground tiles; deep_floor is only a hidden fail-safe catcher. -->
+    <compiler angle="radian"/>
+    <!-- Global physics settings: 1 kHz simulation and Earth gravity. -->
+    <option timestep="0.001" gravity="0 0 -9.81"/>
+
+    <asset>
+        <!-- Skybox for environment lighting/background only. -->
+        <texture name="sky" type="skybox" builtin="gradient" rgb1="0.78 0.80 0.82" rgb2="0.95 0.96 0.95" width="512" height="3072"/>
+        <!-- Checker texture shared by terrain tiles. -->
+        <texture name="ground_tex" type="2d" builtin="checker" rgb1="0.08 0.40 0.42" rgb2="0.06 0.34 0.36" width="512" height="512"/>
+        <!-- Terrain material (visual + reflectance). -->
+        <material name="ground_mat" texture="ground_tex" texrepeat="20 20" reflectance="0.12" specular="0.08" shininess="0.15"/>
+        <!-- Blue base-wheel material. -->
+        <material name="base_mat" rgba="0.07 0.07 0.08 1.0" specular="0.08" shininess="0.12"/>
+        <!-- Main physical stick material. -->
+        <material name="stick_mat" rgba="0.10 0.10 0.11 1.0" specular="0.18" shininess="0.25"/>
+        <!-- Reaction wheel material. -->
+        <material name="wheel_mat" rgba="0.86 0.87 0.88 1.0" specular="0.85" shininess="0.95"/>
+        <!-- Hub/highlight material. -->
+        <material name="hub_mat" rgba="0.09 0.09 0.10 1.0" specular="0.30" shininess="0.42"/>
+        <!-- Dark chassis trim material. -->
+        <material name="chassis_dark_mat" rgba="0.09 0.10 0.11 1.0" specular="0.35" shininess="0.55"/>
+        <!-- Light chassis trim material. -->
+        <material name="chassis_light_mat" rgba="0.22 0.23 0.24 1.0" specular="0.40" shininess="0.60"/>
+        <!-- Accent/bumper trim material. -->
+        <material name="trim_mat" rgba="0.16 0.17 0.18 1.0" specular="0.22" shininess="0.30"/>
+        <!-- Payload block material. -->
+        <material name="payload_mat" rgba="0.96 0.78 0.30 1.0" specular="0.40" shininess="0.45"/>
+        <!-- Visual tire/rubber material. -->
+        <material name="rubber_mat" rgba="0.08 0.08 0.09 1.0" specular="0.05" shininess="0.10"/>
+        <!-- Glass-like visual material for decorative sensors/eyes. -->
+        <material name="sensor_glass_mat" rgba="0.18 0.19 0.20 0.85" specular="0.25" shininess="0.35"/>
+        <!-- Battery pack shell (white). -->
+        <material name="battery_white_mat" rgba="0.95 0.95 0.93 1.0" specular="0.20" shininess="0.18"/>
+        <!-- Carbon-fiber-like strap/detail. -->
+        <material name="carbon_mat" rgba="0.12 0.12 0.13 1.0" specular="0.35" shininess="0.70"/>
+        <!-- Wire jacket material. -->
+        <material name="wire_red_mat" rgba="0.78 0.12 0.10 1.0" specular="0.20" shininess="0.28"/>
+        <!-- XT-style connector yellow. -->
+        <material name="connector_yellow_mat" rgba="0.86 0.66 0.14 1.0" specular="0.22" shininess="0.22"/>
+    </asset>
+
+    <visual>
+        <!-- Camera clipping range. -->
+        <map znear="0.001" zfar="50"/>
+        <!-- Scene headlight. -->
+        <headlight ambient="0.24 0.24 0.26" diffuse="0.62 0.62 0.62" specular="0.25 0.25 0.25"/>
+        <!-- Atmospheric haze tint. -->
+        <rgba haze="0.90 0.94 1.0 1"/>
+    </visual>
+
+    <worldbody>
+        <!-- Key directional light for shape definition/shadows. -->
+        <light name="sun_key"
+               pos="4 -5 7"
+               dir="-0.5 0.6 -1"
+               directional="true"
+               castshadow="true"
+               diffuse="0.95 0.95 0.92"
+               specular="0.20 0.20 0.20"/>
+        <!-- Fill light to soften contrast. -->
+        <light name="fill"
+               pos="-4 3 3"
+               directional="false"
+               castshadow="false"
+               diffuse="0.35 0.37 0.42"
+               specular="0 0 0"/>
+
+        <!-- Flat ground plane -->
+        <geom name="ground"
+              type="plane"
+              size="100.0 100.0 0.1"
+              pos="0 0 0"
+              material="ground_mat"
+              friction="6.0 0.01 0.0001"
+              solref="0.003 1"
+              solimp="0.995 0.999 0.0001 0.5 2"/>
+
+        <!-- Safety catcher below terrain -->
+        <!-- Invisible fail-safe floor to catch numerical blowups/falls. -->
+        <geom name="deep_floor" type="plane" size="100 100 0.001" pos="0 0 -1.2" rgba="0 0 0 0" friction="6.0 0.01 0.0001"/>
+
+        <!-- Camera -->
+        <!-- Default side camera for observing balancing behavior. -->
+        <camera name="side"
+                pos="0 -3.8 1.55"
+                quat="0.9336 0.3584 0 0"/>
+
+        <!-- Base free body (fully unconstrained in world, no artificial translational rails). -->
+        <body name="base_x" pos="0 0 0.10">
+                <freejoint name="base_free"/>
+                <!-- Small inertial regularizer for numerical robustness. -->
+                <inertial pos="0 0 0" mass="0.02" diaginertia="0.00001 0.00001 0.00001"/>
+
+            <!-- Base cart Y -->
+            <body name="base_y" pos="0 0 0.0">
+
+                <!-- Cart body -->
+                <!-- Main physical base-wheel/body geom for contact and inertia. -->
+                <geom name="drive_wheel_phys"
+                      type="cylinder"
+                      size="0.10 0.035"
+                      mass="0.5"
+                      quat="0.7071 0 0.7071 0"
+                      material="base_mat"
+                      friction="6.0 0.01 0.0001"
+                      solref="0.003 1"
+                      solimp="0.995 0.999 0.0001 0.5 2"/>
+                <!-- Visual chassis shell (no mass/collision contribution). -->
+                <geom name="chassis_shell"
+                      type="box"
+                      size="0.125 0.105 0.045"
+                      pos="-0.01 0 0.155"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="chassis_dark_mat"/>
+                <!-- Visual top panel (no mass/collision contribution). -->
+                <geom name="chassis_top_plate"
+                      type="box"
+                      size="0.095 0.080 0.012"
+                      pos="-0.01 0 0.213"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="chassis_light_mat"/>
+                <!-- Lower fork cover block. -->
+                <geom name="fork_cover"
+                      type="box"
+                      size="0.070 0.070 0.022"
+                      pos="0.040 0.000 0.098"
+                      euler="0.0 0.55 0.0"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="chassis_dark_mat"/>
+                <!-- Side standoff detail. -->
+                <geom name="left_standoff"
+                      type="capsule"
+                      fromto="-0.040 0.085 0.110  -0.040 0.085 0.205"
+                      size="0.010"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="trim_mat"/>
+                <!-- Side standoff detail. -->
+                <geom name="right_standoff"
+                      type="capsule"
+                      fromto="-0.040 -0.085 0.110  -0.040 -0.085 0.205"
+                      size="0.010"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="trim_mat"/>
+                <!-- Battery pack shell (left side). -->
+                <geom name="battery_pack"
+                      type="box"
+                      size="0.070 0.028 0.022"
+                      pos="-0.082 0.104 0.188"
+                      euler="0.05 -0.36 0.22"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="battery_white_mat"/>
+                <!-- Battery strap. -->
+                <geom name="battery_strap"
+                      type="box"
+                      size="0.010 0.031 0.024"
+                      pos="-0.082 0.104 0.188"
+                      euler="0.05 -0.36 0.22"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="carbon_mat"/>
+                <!-- Battery cable exiting pack. -->
+                <geom name="wire_red_a"
+                      type="capsule"
+                      fromto="-0.025 0.092 0.176  0.035 0.050 0.115"
+                      size="0.0042"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="wire_red_mat"/>
+                <!-- Cable loop around lower frame. -->
+                <geom name="wire_red_b"
+                      type="capsule"
+                      fromto="0.035 0.050 0.115  0.020 -0.060 0.090"
+                      size="0.0042"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="wire_red_mat"/>
+                <!-- Connector block (yellow). -->
+                <geom name="connector_yellow"
+                      type="box"
+                      size="0.010 0.008 0.007"
+                      pos="0.005 0.040 0.107"
+                      euler="0.15 0.05 -0.25"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="connector_yellow_mat"/>
+                <!-- Connector tail (white). -->
+                <geom name="connector_white"
+                      type="box"
+                      size="0.009 0.007 0.006"
+                      pos="0.019 0.038 0.103"
+                      euler="0.15 0.05 -0.25"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="battery_white_mat"/>
+                <!-- Small front electronics block. -->
+                <geom name="base_sensor_dome"
+                      type="box"
+                      size="0.030 0.020 0.010"
+                      pos="0.052 0 0.112"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="chassis_light_mat"/>
+                <!-- Visual white sidewall bands on drive wheel. -->
+                <geom name="drive_sidewall_l"
+                      type="cylinder"
+                      size="0.100 0.004"
+                      pos="0.031 0 0"
+                      quat="0.7071 0 0.7071 0"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="battery_white_mat"/>
+                <geom name="drive_sidewall_r"
+                      type="cylinder"
+                      size="0.100 0.004"
+                      pos="-0.031 0 0"
+                      quat="0.7071 0 0.7071 0"
+                      mass="0"
+                      contype="0"
+                      conaffinity="0"
+                      material="battery_white_mat"/>
+
+                <!-- Single-wheel fork: steer yaw + wheel roll DOFs. -->
+                <body name="ball_x_frame" pos="0 0 -0.26">
+                    <inertial pos="0 0 0" mass="0.01" diaginertia="0.00001 0.00001 0.00001"/>
+                    <joint name="base_x_slide"
+                           type="hinge"
+                           axis="0 0 1"
+                           damping="2.0"
+                           armature="0.06"
+                           limited="true"
+                           range="-0.0001 0.0001"/>
+
+                    <body name="ball_y_frame" pos="0 0 0">
+                        <inertial pos="0 0 0" mass="0.01" diaginertia="0.00001 0.00001 0.00001"/>
+                        <joint name="base_y_slide"
+                               type="hinge"
+                               axis="1 0 0"
+                               damping="0.7"
+                               armature="0.06"
+                               limited="false"/>
+
+                    </body>
+                </body>
+
+                <!-- 2-DOF stick: pitch then roll -->
+                <body name="stick_pitch_frame" pos="0 0 0.10">
+                    <!-- Light frame inertia to keep pitch frame numerically well-behaved. -->
+                    <inertial pos="0 0 0" mass="0.01" diaginertia="1e-5 1e-5 1e-5"/>
+
+                    <!-- First stick rotational DOF: pitch. -->
+                    <joint name="stick_pitch"
+                           type="hinge"
+                           axis="0 1 0"
+                           range="-3.14 3.14"
+                           damping="10.0"
+                           armature="0.04"/>
+
+                    <body name="stick" pos="0 0 0">
+
+                        <!-- Second stick rotational DOF: roll. -->
+                        <joint name="stick_roll"
+                               type="hinge"
+                               axis="1 0 0"
+                               range="-3.14 3.14"
+                               damping="12.0"
+                               armature="0.04"/>
+
+                        <!-- Main physical pendulum stick (mass-carrying). -->
+                        <geom type="capsule"
+                              fromto="0 0 0  0 0 0.50"
+                              size="0.04"
+                              mass="1.0"
+                              material="stick_mat"/>
+                        <!-- Visual torso fairing around the stick. -->
+                        <geom name="torso_shell"
+                              type="capsule"
+                              fromto="0 0 0.03  0 0 0.30"
+                              size="0.050"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="chassis_dark_mat"/>
+                        <!-- Upper motor mount base plate. -->
+                        <geom name="shoulder_ring"
+                              type="box"
+                              size="0.060 0.045 0.015"
+                              pos="0 0 0.300"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="chassis_dark_mat"/>
+                        <!-- Left vertical wheel support. -->
+                        <geom name="head_shell"
+                              type="box"
+                              size="0.015 0.030 0.110"
+                              pos="-0.058 0 0.405"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="chassis_dark_mat"/>
+                        <!-- Right vertical wheel support. -->
+                        <geom name="eye_left"
+                              type="box"
+                              size="0.015 0.030 0.110"
+                              pos="0.058 0 0.405"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="chassis_dark_mat"/>
+                        <!-- Rear brace behind reaction wheel. -->
+                        <geom name="eye_right"
+                              type="capsule"
+                              fromto="-0.055 0.000 0.320  0.055 0.000 0.320"
+                              size="0.010"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="trim_mat"/>
+                        <!-- Motor cap at top rear. -->
+                        <geom name="head_band"
+                              type="cylinder"
+                              size="0.022 0.016"
+                              pos="0 -0.048 0.365"
+                              quat="0.7071 0.7071 0 0"
+                              mass="0"
+                              contype="0"
+                              conaffinity="0"
+                              material="trim_mat"/>
+
+                        <!-- Physical payload mount: user-controlled top payload mass. -->
+                        <body name="payload" pos="0 0 0.57">
+                            <inertial pos="0 0 0" mass="0.000001" diaginertia="0.00000001 0.00000001 0.00000001"/>
+                            <geom name="payload_geom"
+                                  type="box"
+                                  size="0.06 0.06 0.035"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  rgba="0 0 0 0"
+                                  material="payload_mat"
+                                  friction="1.2 0.02 0.001"/>
+                        </body>
+
+                        <!-- Reaction wheel -->
+                        <body name="wheel" pos="0 0 0.35">
+
+                            <!-- Wheel spin DOF: fast rotor for attitude control torque. -->
+                            <joint name="wheel_spin"
+                                   type="hinge"
+                                   axis="0 1 0"
+                                   damping="0.5"
+                                   limited="false"/>
+
+                            <!-- Physical reaction wheel rotor mass. -->
+                            <geom type="cylinder"
+                                  size="0.15 0.023"
+                                  mass="0.8"
+                                  quat="0.7071 0.7071 0 0"
+                                  material="hub_mat"/>
+                            <!-- Silver outer ring. -->
+                            <geom name="wheel_tire"
+                                  type="cylinder"
+                                  size="0.169 0.014"
+                                  quat="0.7071 0.7071 0 0"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="wheel_mat"/>
+                            <!-- Dark inner web ring. -->
+                            <geom name="wheel_rim"
+                                  type="cylinder"
+                                  size="0.122 0.012"
+                                  quat="0.7071 0.7071 0 0"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="chassis_dark_mat"/>
+                            <!-- 3-spoke pattern (silver). -->
+                            <geom name="wheel_spoke_x"
+                                  type="capsule"
+                                  fromto="0 0 0  0.109 0 0"
+                                  size="0.008"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="wheel_mat"/>
+                            <!-- 3-spoke pattern (silver). -->
+                            <geom name="wheel_spoke_y"
+                                  type="capsule"
+                                  fromto="0 0 0  -0.055 0 0.095"
+                                  size="0.008"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="wheel_mat"/>
+                            <!-- 3-spoke pattern (silver). -->
+                            <geom name="wheel_spoke_z"
+                                  type="capsule"
+                                  fromto="0 0 0  -0.055 0 -0.095"
+                                  size="0.008"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="wheel_mat"/>
+
+                            <!-- Physical wheel hub mass near axis. -->
+                            <geom type="cylinder"
+                                  size="0.038 0.009"
+                                  quat="0.7071 0.7071 0 0"
+                                  material="hub_mat"/>
+                            <!-- Visual hub cap detail. -->
+                            <geom name="hub_cap"
+                                  type="cylinder"
+                                  size="0.027 0.006"
+                                  quat="0.7071 0.7071 0 0"
+                                  mass="0"
+                                  contype="0"
+                                  conaffinity="0"
+                                  material="wheel_mat"/>
+                        </body>
+                    </body>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <contact>
+        <!-- Prevent self-collision between base wheel and stick link at nominal assembly pose. -->
+        <exclude body1="base_y" body2="stick"/>
+    </contact>
+
+    <equality>
+        <!-- Keep base rooted to world so pitch/roll gravity couples into joint dynamics. -->
+        <weld name="lock_base_to_world" body1="base_x"/>
+    </equality>
+
+    <actuator>
+        <!-- Motor command for wheel spin torque. -->
+        <motor name="wheel_spin"
+               joint="wheel_spin"
+               ctrlrange="-2000 2000"/>
+
+        <!-- Motor command for base X force. -->
+        <motor name="base_x_force"
+               joint="base_x_slide"
+               ctrlrange="-100 100"/>
+
+        <!-- Motor command for base Y force. -->
+        <motor name="base_y_force"
+               joint="base_y_slide"
+               ctrlrange="-100 100"/>
+
+    </actuator>
+
+    <sensor>
+        <!-- Estimator channels: named sensors consumed by runtime_model.lookup_sensor_ids. -->
+        <jointpos name="imu_pitch_angle" joint="stick_pitch"/>
+        <jointpos name="imu_roll_angle" joint="stick_roll"/>
+        <jointvel name="imu_pitch_rate" joint="stick_pitch"/>
+        <jointvel name="imu_roll_rate" joint="stick_roll"/>
+        <jointvel name="wheel_rate_sensor" joint="wheel_spin"/>
+        <jointpos name="base_x_pos_sensor" joint="base_x_slide"/>
+        <jointpos name="base_y_pos_sensor" joint="base_y_slide"/>
+        <jointvel name="base_x_vel_sensor" joint="base_x_slide"/>
+        <jointvel name="base_y_vel_sensor" joint="base_y_slide"/>
+    </sensor>
+</mujoco>
