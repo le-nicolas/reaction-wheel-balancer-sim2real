@@ -1,12 +1,28 @@
 # Final Balancer: Build Story, Problems, and Reproducible Guide
 
-This folder is the current MuJoCo implementation of our wheel-on-stick balancer.
+This folder is the maintained simulator, controller, HIL, and operator-tooling stack for the project.
+It is no longer just the MuJoCo viewer path.
+
 The goal of this README is to explain:
 
 1. What `final.py` and `final.xml` do.
 2. How we evolved the design.
 3. What failed along the way and how we fixed it.
 4. How to reproduce the work and rebuild the system from scratch.
+
+## 0) Status First
+
+Authoritative status for `final/` as of `2026-03-08`:
+
+- The current sim-to-real controller branch is `hardware_explicit_split`.
+- In that branch:
+  - pitch goes to the base wheel
+  - roll goes to the reaction wheel
+- Restrained bring-up can run IMU-only on the base wheel. A base encoder is optional for the inner loop and recommended later for outer-loop position behavior.
+- `hil_bridge.py` is the live mapping layer for the ESP32 rig.
+- `sim_real_dashboard.py` is the cleaner operator UI for side-by-side sim vs real traces.
+
+If you find older notes claiming that pitch authority was not being driven into the base wheel correctly, treat those notes as historical.
 
 ## 1) What Is In This Folder
 
@@ -22,6 +38,10 @@ The goal of this README is to explain:
 | `final/mpc_controller.py` | Constrained MPC solver (OSQP/scipy fallback). |
 | `final/controller_eval.py` | Headless evaluator used by benchmarking/tuning scripts. |
 | `final/benchmark.py` | Reproducible stress benchmark and artifact writer. |
+| `final/hil_bridge.py` | PC-side HIL bridge between ESP32 telemetry and the controller stack. |
+| `final/hil_plug_play_smoke.py` | Real-time synthetic smoke suite for plug-and-play bring-up checks. |
+| `final/sim_real_dashboard.py` | Cleaner live dashboard with gauges, status lights, and side-by-side sim vs real traces. |
+| `final/play_everything.py` | Workspace launcher for sim, HIL bridge, plotter, and dashboard. |
 | `final/analyze_crash_coupling.py` | Replays one episode and prints pre-crash disturbance-event wheel/pitch trends for coupling diagnosis. |
 | `final/find_lqr_envelope.py` | Binary-searches disturbance XY magnitude where per-cycle pitch ratchet crosses a target threshold. |
 | `final/sim2real_sensitivity.py` | Ranks model/domain sensitivity from benchmark CSV baselines. |

@@ -1,60 +1,100 @@
 # ESP32 Reaction Wheel + Base Wheel PlatformIO Scaffold
 
-This folder is the sim-to-real starting point for the real rig that matches your MuJoCo project direction:
+This folder is the current firmware scaffold for the real rig that matches the MuJoCo sim-to-real stack.
 
-- one reaction wheel on the upper body
-- one driven base wheel at the bottom
-- ESP32-WROOM dev board
-- BMI088 IMU
-- AS5600 magnetic encoder on the reaction wheel BLDC
-- DRV8313-class 3PWM BLDC stage for the reaction wheel
-- BTS7960 H-bridge for the geared base wheel
-- 3S Li-Po power rail with buck conversion for logic
+## Current Status
 
-The firmware is intentionally split into two practical modes:
+Authoritative status for this firmware as of `2026-03-08`:
 
-1. `HIL bridge` (default): ESP32 handles sensors, motor output, telemetry, and WiFi while your existing Python stack remains the controller.
-2. `Onboard wheel-only`: uses the exported controller/estimator contract from `final/export_firmware_params.py` for conservative reaction-wheel bring-up.
+- Default mode is still `HIL bridge`.
+- The intended real actuator split is:
+  - base wheel handles pitch
+  - reaction wheel handles roll
+- A base-wheel encoder is not required for the inner balance loop.
+- The firmware supports an optional base encoder for later outer-loop improvements.
+- Reaction-wheel FOC is implemented with SimpleFOC using:
+  - `AS5600`
+  - `BLDCDriver3PWM`
+  - voltage-mode torque control
+- The base wheel is a brushed/DC geared motor on `BTS7960`, so it is PWM-driven, not FOC-driven.
 
-## Why it is structured this way
+If you find older notes saying the base wheel had to wait for an encoder before doing meaningful pitch correction, treat those notes as historical. The current design supports IMU-only pitch stabilization for restrained bring-up.
 
-Your current MuJoCo export path assumes richer base-state knowledge than the hardware list currently provides.
-The big gap is that the BOM does not include a base-wheel encoder, so full state parity for `base_x/base_vx` is not available yet.
+## Hardware Direction
 
-Because of that, the checked-in firmware defaults to:
+This scaffold is built around:
 
-- keep HIL mode ready now
-- keep base-wheel driver ready now
-- keep onboard controller conservative
-- default onboard control to reaction-wheel-only parity until the base wheel is instrumented
+- `ESP32-WROOM` dev board
+- `BMI088` IMU
+- `AS5600` magnetic encoder on the reaction wheel BLDC
+- `2804` hollow-shaft BLDC with `DRV8313`-class 3PWM stage
+- `110 RPM` geared base motor with `BTS7960`
+- `3S Li-Po 11.1 V 1500 mAh 25C`
+- `12 V -> 5 V` buck for logic power
 
-That is the fastest path from sim to real without pretending the missing sensing problem is already solved.
+## Control Modes
 
-## Folder layout
+Defined in `include/robot_config.h`:
 
-- `platformio.ini`: ESP32 Arduino PlatformIO project config.
-- `include/board_pins.h`: pin map for the exact boards listed above.
-- `include/robot_config.h`: control mode, WiFi, power, scaling, and safety settings.
-- `include/controller_params.h`: generated controller header exported from the MuJoCo stack.
-- `src/main.cpp`: firmware entry point, IMU readout, AS5600 readout, WiFi bridge, onboard loop, safety handling.
-- `lib/sim_parity/`: reused C controller/estimator/guard code from `final/firmware/`.
-- `tools/export_sim_controller.ps1`: refresh `include/controller_params.h` from the current MuJoCo model.
+1. `kHilBridge`
+   - current default
+   - ESP32 handles sensors, WiFi telemetry, safety, and motor output
+   - the PC-side Python stack remains the controller
+2. `kOnboardWheelOnly`
+   - conservative local mode
+   - useful for isolated reaction-wheel checks
+3. `kOnboardExplicitSplit`
+   - onboard split controller path
+   - intended structure:
+     - pitch -> base wheel
+     - roll -> reaction wheel
 
-## Power topology
+Current checked-in defaults are conservative:
 
-Recommended wiring topology for the listed hardware:
+- `kControlMode = kHilBridge`
+- `kHasBaseWheelEncoder = false`
+- `kBaseWheelEnabledInHil = true`
+- `kBaseWheelEnabledInOnboard = false`
 
-1. `3S Li-Po (11.1 V nominal, 12.6 V full)` to `BTS7960` motor power.
-2. The same battery rail to `DRV8313` motor power input.
-3. `12 V -> 5 V buck` to the ESP32 `5V/VIN` input.
-4. `BMI088` and `AS5600` on `3.3 V`, not `5 V`.
-5. Common ground between battery negative, ESP32 ground, BTS7960 ground, DRV8313 ground, BMI088 ground, and AS5600 ground.
+That means the firmware is ready for live HIL bring-up immediately, while onboard base-wheel use still requires deliberate enabling and tuning.
 
-If you use the `MP1584`, set it deliberately for one job only. The cleanest choice is usually a dedicated regulated sensor rail or a spare logic rail. Do not feed the BMI088 or AS5600 from an unknown 5 V rail.
+## Folder Layout
 
-## Pin map
+- `platformio.ini`
+  - PlatformIO project config
+- `include/board_pins.h`
+  - GPIO map for the current rig
+- `include/robot_config.h`
+  - control mode, WiFi, motor scaling, and safety settings
+- `include/controller_params.h`
+  - exported controller header from the MuJoCo stack
+- `src/main.cpp`
+  - firmware entry point
+  - BMI088 readout
+  - AS5600 readout
+  - reaction-wheel FOC
+  - BTS7960 base-wheel drive
+  - telemetry and safety handling
+- `lib/sim_parity/`
+  - reused controller/estimator/guard code from the sim export path
+- `tools/export_sim_controller.ps1`
+  - refreshes `controller_params.h`
 
-Current default pin map:
+## Power Topology
+
+Recommended power arrangement:
+
+1. `3S Li-Po` to `BTS7960` motor power
+2. the same battery rail to the `DRV8313` motor stage
+3. `12 V -> 5 V buck` to ESP32 `5V/VIN`
+4. `BMI088` and `AS5600` on `3.3 V`
+5. common ground across battery, ESP32, BTS7960, DRV8313, BMI088, and AS5600
+
+If you use the `MP1584`, assign it one clean job and verify the output before connecting sensors.
+
+## Pin Map
+
+Current default pins in `include/board_pins.h`:
 
 - I2C SDA: `GPIO21`
 - I2C SCL: `GPIO22`
@@ -62,71 +102,89 @@ Current default pin map:
 - DRV8313 phase U/V/W PWM: `GPIO26`, `GPIO27`, `GPIO14`
 - BTS7960 RPWM/LPWM: `GPIO32`, `GPIO33`
 - BTS7960 REN/LEN: `GPIO18`, `GPIO19`
-- Optional battery sense ADC: `GPIO34`
+- base encoder A/B: `GPIO4`, `GPIO5`
+- optional battery ADC: `GPIO34`
 
-Adjust these in `include/board_pins.h` if your actual PCB/wiring differs.
+Adjust these if your actual wiring differs.
 
-## Current control contract
+## What The Firmware Does Right Now
 
-The firmware keeps the same basic controller contract as the existing repo:
+- reads the `BMI088`
+- estimates pitch and roll from the IMU
+- reads the reaction wheel via `AS5600`
+- runs reaction-wheel FOC continuously
+- drives the base motor through `BTS7960`
+- streams live telemetry over WiFi/UDP
+- accepts bridge commands over WiFi/UDP
+- reports:
+  - pitch/roll
+  - gyro/accel
+  - reaction angle/speed
+  - optional base encoder state
+  - battery voltage if enabled
+  - fault and ESTOP state
 
-- estimator state: `x[9]`
-- measurement vector: `[pitch, roll, pitch_rate, roll_rate, wheel_rate]`
-- controller output: `[reaction_wheel, base_x, base_y]`
+## FOC Reality
 
-On the real rig right now:
+The reaction-wheel FOC path is implemented, but it is still bring-up grade:
 
-- `reaction_wheel -> real reaction wheel`
-- `base_x -> real base wheel`
-- `base_y -> not physically present in this scaffold`
+- sensor-based commutation is present
+- `initFOC()` and `loopFOC()` are used
+- control is `torque_controller = voltage`
+- there is no current sensing yet
+- motor constants and voltage limits still need real-hardware confirmation
 
-So the onboard project is checked in with a wheel-only export by default.
-That is deliberate.
+So:
 
-The onboard code accepts the current exported measurement model and zero-fills the unavailable base-state channels until you add a real base-wheel encoder.
+- reaction wheel FOC: yes
+- base wheel FOC: not applicable
+- fully tuned production motor control: not yet
 
-## First bring-up sequence
+## Bring-Up Order
 
 1. Edit WiFi settings in `include/robot_config.h`.
-2. Confirm the reaction wheel pole-pair count in `include/robot_config.h`.
-3. Keep the robot physically restrained or lifted.
-4. Flash the project with `pio run -t upload`.
-5. Start in HIL mode first.
-6. Run the PC bridge:
+2. Confirm the reaction wheel pole-pair count.
+3. Keep the robot restrained or lifted.
+4. Flash the firmware.
+5. Start in `HIL bridge` mode first.
+6. Start the PC bridge:
 
 ```powershell
-python final/hil_bridge.py --esp32-ip <your-esp32-ip> --plot
+python final/hil_bridge.py --esp32-ip <your-esp32-ip> --dashboard-telemetry --dashboard-port 9872
 ```
 
-7. Verify IMU signs, reaction wheel polarity, base wheel polarity, and timeout zeroing.
-8. Only then switch to onboard wheel-only mode in `include/robot_config.h`.
+7. Start the dashboard:
 
-## Refreshing controller params from MuJoCo
+```powershell
+python final/sim_real_dashboard.py --sim-udp-port 9871 --real-udp-port 9872
+```
 
-The checked-in header is just a conservative starting point.
-Refresh it whenever sim tuning changes:
+8. Verify:
+   - IMU signs
+   - reaction motor polarity
+   - base motor polarity
+   - ESTOP behavior
+   - timeout zeroing
+9. Only then consider enabling onboard explicit split mode.
+
+## Refreshing Controller Params
+
+Refresh the exported controller header whenever the sim tuning changes:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\esp32_rw_base_platformio\tools\export_sim_controller.ps1
 ```
 
-For a future base-wheel-assisted export:
+## Known Gaps
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\esp32_rw_base_platformio\tools\export_sim_controller.ps1 -Profile base_assist
-```
+1. No current sensing on the reaction-wheel power stage
+2. battery sensing is scaffolded but disabled until the divider is wired and calibrated
+3. base encoder outer loop is not active by default
+4. onboard base-wheel control is intentionally conservative in the checked-in defaults
 
-## Known gaps you should expect
+## Highest-Value Next Additions
 
-1. No base-wheel encoder is included in the BOM, so onboard base-state estimation is incomplete.
-2. Reaction wheel motor constants are placeholders until you measure the real 2804 motor.
-3. The DRV8313 path is using SimpleFOC voltage-mode torque approximation, not closed-loop current control.
-4. Battery sensing is scaffolded but disabled until you wire the divider and calibrate the ADC scale.
-
-## Recommended next hardware additions
-
-If you want tighter sim-to-real parity, the highest-value additions are:
-
-1. a base-wheel encoder
-2. current sensing on the reaction wheel phase driver
-3. a proper battery-voltage divider into the ESP32 ADC
+1. current sensing for the reaction-wheel stage
+2. calibrated battery sensing
+3. base-wheel encoder for outer-loop position hold
+4. measured motor constants for the real `2804`

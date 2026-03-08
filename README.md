@@ -1,275 +1,149 @@
-# Reaction Wheel Balancer Sim-to-Real
+# Self-Balancing Unicycle Robot
 
-This repository is the sim-to-real bring-up package for a reaction-wheel balancer with a driven base wheel.
-
-The intended real robot architecture is:
-
-- base wheel corrects pitch
-- reaction wheel corrects roll
-- ESP32 handles sensors, motor output, telemetry, and safety
-- the PC-side stack stays available for live HIL tuning and dyno-style mapping
-
-The point of this repo is not just to "flash firmware." It is to make first power-on practical:
-
-- verify wiring and signs
-- verify which control channel drives which motor
-- verify ESTOP and timeout behavior
-- save a mapping profile
-- then tune the real robot toward the MuJoCo behavior
-
-## Hardware Target
-
-This package was prepared around the following build direction:
-
-- `ESP32-WROOM` dev board
-- `BMI088` IMU
-- `AS5600` magnetic encoder on the reaction wheel BLDC
-- `2804` hollow-shaft BLDC with `DRV8313`-class 3PWM driver board
-- `110 RPM` geared base motor with `BTS7960` H-bridge
-- `3S Li-Po 11.1 V 1500 mAh 25C`
-- `12 V -> 5 V` buck converter for logic power
-
-## Repository Layout
-
-- `final/`
-  - MuJoCo runtime/controller/export stack
-  - HIL bridge
-  - synthetic plug-and-play smoke tester
-  - mapping profile and workflow docs
-- `esp32_rw_base_platformio/`
-  - PlatformIO firmware scaffold for the ESP32 rig
-  - sensor readout, WiFi telemetry, motor output, and onboard conservative mode
+![Status](https://img.shields.io/badge/status-active_research-orange)
+![Scope](https://img.shields.io/badge/scope-sim--to--real_in_progress-blue)
+![Maintained](https://img.shields.io/badge/maintained_paths-final%2F_+_esp32__rw__base__platformio-green)
+![Evidence](https://img.shields.io/badge/claims-artifact_backed-brightgreen)
 
 ## Current Status
 
-What is already in place:
+Authoritative status for this repo as of `2026-03-08`:
 
-- real-time synthetic HIL smoke testing for plug-and-play bring-up
-- live mapping profile support in the bridge
-- timeout and tilt ESTOP behavior
-- PlatformIO firmware scaffold for the ESP32 rig
-- telemetry comparison tooling for sim vs HIL logs
-- explicit split controller path for real hardware
-- optional base-encoder telemetry path for later outer-loop upgrades
+- This repo is no longer just simulation-only. It is a sim-first stack with an active HIL and ESP32 bring-up path.
+- The maintained software paths are:
+  - `final/`
+  - `esp32_rw_base_platformio/`
+- The intended real robot architecture is:
+  - base wheel corrects pitch
+  - reaction wheel corrects roll
+- The current sim-to-real controller branch is `hardware_explicit_split`.
+- For restrained bring-up, the base wheel does not require an encoder for the inner balance loop. IMU pitch angle and pitch rate are enough to drive meaningful pitch correction into the base wheel.
+- A base encoder is still recommended later for position hold, drift suppression, and better outer-loop parity.
 
-What the current stack proves:
+If you find older notes saying that pitch was not being driven into the base wheel correctly, treat those notes as historical. That problem was the earlier state, not the current one.
 
-- the transport layer works
-- the dyno-style mapping workflow exists
-- the safety layer is usable for restrained bring-up
-- the runtime split controller now enforces the intended actuator roles
-- restrained bring-up can run in IMU-only mode without a base wheel encoder
+## What This Repo Contains
 
-Current limitation:
+- `final/`
+  - MuJoCo model and runtime controller
+  - benchmark/evaluation tooling
+  - HIL bridge
+  - synthetic smoke tests
+  - telemetry plotter
+  - live sim-vs-real dashboard
+- `esp32_rw_base_platformio/`
+  - PlatformIO firmware scaffold for the ESP32 rig
+  - BMI088 + AS5600 sensor path
+  - reaction-wheel FOC path
+  - base-wheel BTS7960 drive path
+- `docs/`
+  - workflow and analysis docs
+- `archive/`
+  - historical prototypes and investigations, not the recommended entry point
 
-- the explicit split controller is for correct hardware architecture and safe bring-up, not for beating the richer sim-oriented controller on every benchmark mode
-- the base encoder is still recommended later for position hold, drift suppression, and trajectory tracking
+## What Is Working Now
 
-## Install
+- MuJoCo simulation and headless benchmarking
+- `hardware_explicit_split` actuator routing:
+  - pitch -> base wheel
+  - roll -> reaction wheel
+- HIL bridge with live mapping and ESTOP behavior
+- live sim-vs-real dashboard with gauges, status lights, and side-by-side traces
+- PlatformIO ESP32 scaffold with WiFi telemetry
+- reaction-wheel FOC via SimpleFOC sensor-based commutation
 
-Python dependencies:
+## What Is Still Limited
 
-```powershell
-python -m pip install -r requirements.txt
-```
+- This is still a bring-up and research stack, not a finished hardware product.
+- The reaction-wheel FOC path is voltage-mode torque control, not closed-loop current control.
+- The base wheel can balance from IMU feedback alone, but it will drift without an encoder-based outer loop.
+- The richer `current` family can still score better than `hardware_explicit_split` in some pure simulation benchmark modes.
+- Real hardware still needs staged restraint testing, sign checks, and live gain adjustment.
 
-Recommended extras:
+## Architecture
 
-- PlatformIO for ESP32 builds
-- VS Code with PlatformIO extension
+Current intended hardware split:
+
+- base wheel:
+  - geared DC motor via `BTS7960`
+  - handles pitch stabilization
+- reaction wheel:
+  - BLDC via `DRV8313`-class 3PWM stage
+  - `AS5600` magnetic encoder
+  - handles roll stabilization
+- controller stack:
+  - MuJoCo remains the reference environment
+  - `hil_bridge.py` is the live mapping layer
+  - `sim_real_dashboard.py` is the operator dashboard
 
 ## Quick Start
 
-### 1. PC-side synthetic bring-up
-
-Run the real-time synthetic smoke test:
+Run the simulator:
 
 ```powershell
-python final/hil_plug_play_smoke.py --bridge-backend stub
+python final/final.py --mode smooth
 ```
 
-Run the runtime-backed smoke test:
+Run the sim telemetry plotter:
 
 ```powershell
-python final/hil_plug_play_smoke.py --bridge-backend runtime
+python final/telemetry_plotter.py --source udp --udp-port 9871 --window-s 12
+python final/final.py --mode smooth --telemetry --telemetry-transport udp --telemetry-udp-host 127.0.0.1 --telemetry-udp-port 9871
 ```
 
-This checks:
-
-- idle
-- pitch forward
-- pitch backward
-- roll right
-- roll left
-- tilt ESTOP
-- packet timeout ESTOP
-
-### 2. Live bridge for hardware
-
-Start the bridge with a mapping profile:
-
-```powershell
-python final/hil_bridge.py --esp32-ip <ESP32_IP> --mapping-profile final/hardware_mapping_template.json --save-mapping-profile final/results/live_map_session.json --plot
-```
-
-This is the main dyno-style workflow. You bring the robot up physically restrained, observe telemetry, and adjust mapping values in real time.
-
-### 2.5. Cleaner dashboard for live sim vs real
-
-The new operator dashboard is a separate live view with:
-
-- bigger dual-value gauges
-- status lights for link, ESTOP, faults, encoder state, and packet health
-- side-by-side traces for simulation and real/HIL telemetry
-
-Run it with the bridge dashboard mirror enabled:
+Run the cleaner sim-vs-real dashboard:
 
 ```powershell
 python final/sim_real_dashboard.py --sim-udp-port 9871 --real-udp-port 9872
 python final/hil_bridge.py --esp32-ip <ESP32_IP> --dashboard-telemetry --dashboard-port 9872
 ```
 
-Or launch the full stack in one command:
+Run the one-command launcher:
 
 ```powershell
 python final/play_everything.py --ui dashboard --with-hil --no-hil-plot --esp32-ip <ESP32_IP>
 ```
 
-Preview:
-
-![Sim vs real dashboard](artifacts/sim_real_dashboard_demo.png)
-
-### 3. ESP32 firmware
-
-The ESP32 project lives in:
-
-```text
-esp32_rw_base_platformio/
-```
-
-Read:
-
-- `esp32_rw_base_platformio/README.md`
-
-Typical flow:
+Run the synthetic HIL smoke test:
 
 ```powershell
-cd esp32_rw_base_platformio
-pio run -t upload
+python final/hil_plug_play_smoke.py --bridge-backend runtime
 ```
 
-## Encoder Reality
+Run the benchmark used for the latest sim comparison:
 
-You do not need a base wheel encoder for the inner balance loop.
+```powershell
+python final/benchmark.py --benchmark-profile fast_pr --episodes 100 --steps 2500 --trials 0 --controller-families current,hardware_explicit_split --model-variants nominal --domain-rand-profile default --compare-modes default-vs-low-spin-robust --primary-objective balanced
+```
 
-The current hardware split is:
+## Latest Reference Artifacts
 
-- pitch angle and pitch rate from the IMU drive the base wheel
-- roll angle and roll rate drive the reaction wheel
+The current benchmark snapshot used in the latest README updates is:
 
-That is enough for restrained balance bring-up and actuator validation. Without a base encoder, the robot can still balance, but it will drift over time because there is no outer loop correcting wheel position.
+- `final/results/benchmark_20260308_152510.csv`
+- `final/results/benchmark_20260308_152510_pareto.png`
+- `final/results/sim_vs_hardware_explicit_split_100ep.png`
+- `final/results/sim_real_dashboard_demo.png`
 
-The base encoder becomes useful later for:
+High-level interpretation:
 
-- holding ground position
-- reducing long-term creep
-- tracking trajectories
-- improving sim-to-real parity for the full state-space controller
+- both `current` and `hardware_explicit_split` survived all `100/100` nominal episodes
+- `hardware_explicit_split` is the correct branch for your real split-actuation hardware
+- `current` still performs better in some low-spin pure-sim cases
 
-## Mapping Workflow
+## Read This Next
 
-The mapping layer is the set of values you adjust during restrained bench bring-up so the hardware behaves like the simulation.
-
-Main mapping knobs:
-
-- `reaction_sign`
-- `drive_sign`
-- `pitch_rate_sign`
-- `roll_rate_sign`
-- `reaction_speed_sign`
-- `accel_x_sign`
-- `accel_y_sign`
-- `accel_z_sign`
-- `rw_cmd_scale`
-- `drive_cmd_scale`
-- `pitch_estop_deg`
-- `roll_estop_deg`
-- `comm_estop_s`
-
-Supporting docs:
-
-- `final/DYNO_MAPPING_WORKFLOW.md`
-- `final/HIL_PLUG_AND_PLAY_MATRIX.md`
-
-## Latest Benchmark
-
-Date: `2026-03-08`
-
-Benchmark run:
-
-- `100` episodes
-- profile: `fast_pr`
-- controller families: `current`, `hardware_explicit_split`
-- compare modes: `default-vs-low-spin-robust`
-
-Artifacts:
-
-- `artifacts/benchmark_20260308_152510.csv`
-- `artifacts/benchmark_20260308_152510_pareto.png`
-- `artifacts/benchmark_20260308_152510_summary.txt`
-- `artifacts/sim_vs_hardware_explicit_split_100ep.png`
-
-Plots:
-
-![Pareto benchmark](artifacts/benchmark_20260308_152510_pareto.png)
-
-![Sim vs explicit split](artifacts/sim_vs_hardware_explicit_split_100ep.png)
-
-High-level result:
-
-- both controller families survived all `100/100` nominal episodes
-- `hardware_explicit_split` now matches the intended real actuator architecture
-- `current` still scores better in `low_spin_robust`, which is expected because it is the richer sim-oriented family
-- `hardware_explicit_split` is the right branch for restrained sim-to-real bring-up and live mapping
-
-GPU note:
-
-- the machine has an NVIDIA GPU, but the MuJoCo/control benchmark path used here is CPU-bound
-- the benchmark was still run end-to-end; there was no meaningful CUDA acceleration path to enable for this workflow
-
-## Practical Bring-Up Order
-
-1. Power the robot with the motors restrained or wheels lifted.
-2. Start the PC HIL bridge first.
-3. Verify the IMU signs at idle.
-4. Verify roll commands go to the reaction wheel.
-5. Verify pitch commands go to the base wheel.
-6. Confirm large tilt forces ESTOP and zero outputs.
-7. Confirm packet loss forces timeout ESTOP.
-8. Save the mapping profile.
-9. Only then start matching the real response to MuJoCo.
-
-## Important Engineering Note
-
-The remaining engineering gap is no longer basic actuator split.
-
-That part is now explicit:
-
-- pitch goes to the base wheel
-- roll goes to the reaction wheel
-
-The remaining work is higher-order tuning:
-
-- live gain mapping against the real hardware
-- deciding how much of the richer MuJoCo controller should be preserved for onboard use
-- adding the optional base encoder outer loop when you want less drift and better position behavior
-
-## Files To Read First
-
-- `README.md`
-- `final/hil_bridge.py`
-- `final/hil_plug_play_smoke.py`
-- `final/hardware_mapping_template.json`
-- `final/DYNO_MAPPING_WORKFLOW.md`
-- `final/HIL_PLUG_AND_PLAY_MATRIX.md`
+- `final/README.md`
 - `esp32_rw_base_platformio/README.md`
+- `final/hil_bridge.py`
+- `final/sim_real_dashboard.py`
+- `final/hil_plug_play_smoke.py`
+- `final/DYNO_MAPPING_WORKFLOW.md`
+- `final/HIL_PLUG_AND_PLAY_MATRIX.md`
+
+## Boundaries
+
+- Do not treat archived files as the current implementation.
+- Do not treat pure simulation results as automatic hardware proof.
+- Do not flash unverified hardware changes without restrained bring-up.
+- Use benchmark artifacts, smoke tests, and telemetry logs as the source of truth for claims.
